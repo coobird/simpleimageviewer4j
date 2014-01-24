@@ -29,7 +29,7 @@ public class Viewer {
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);
 			
-			// Center image
+			// Center image, but show scrollbars when smaller than window.
 			int x = (this.getWidth() / 2) - (curImage.getWidth() / 2);
 			int y = (this.getHeight() / 2) - (curImage.getHeight() / 2);
 			x = Math.max(0, x);
