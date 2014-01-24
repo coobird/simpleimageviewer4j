@@ -24,7 +24,14 @@ public class Viewer {
 		@Override
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);
-			g.drawImage(curImage, 0, 0, null);
+			
+			// Center image
+			int x = (this.getWidth() / 2) - (curImage.getWidth() / 2);
+			int y = (this.getHeight() / 2) - (curImage.getHeight() / 2);
+			x = Math.max(0, x);
+			y = Math.max(0, y);
+			
+			g.drawImage(curImage, x, y, null);
 		}
 		
 		@Override
