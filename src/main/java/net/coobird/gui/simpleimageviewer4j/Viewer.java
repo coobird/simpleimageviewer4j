@@ -15,7 +15,7 @@ public class Viewer {
 	private final List<BufferedImage> images;
 	
 	public Viewer(BufferedImage... images) {
-		if (images == null) {
+		if (images == null || images.length == 0) {
 			throw new NullPointerException("Must specify images.");
 		}
 		
