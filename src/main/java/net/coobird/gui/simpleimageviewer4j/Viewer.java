@@ -2,6 +2,8 @@ package net.coobird.gui.simpleimageviewer4j;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.List;
@@ -23,7 +25,24 @@ public class Viewer {
 	}
 	
 	private class ViewerPanel extends JPanel {
-		private BufferedImage curImage = images.get(0);
+		private int index = 0;
+		private BufferedImage curImage;
+		
+		public ViewerPanel() {
+			curImage = images.get(index);
+		}
+		
+		public void showNext() {
+			index = Math.max(0, --index);
+			curImage = images.get(index);
+			repaint();
+		}
+		
+		public void showPrevious() {
+			index = Math.min(++index, images.size() - 1);
+			curImage = images.get(index);
+			repaint();
+		}
 		
 		@Override
 		protected void paintComponent(Graphics g) {
@@ -48,7 +67,24 @@ public class Viewer {
 		JFrame f = new JFrame("Simple Image Viewer");
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setLocation(100, 100);
-		f.add(new JScrollPane(new ViewerPanel()));
+		
+		final ViewerPanel vp = new ViewerPanel();
+		f.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				super.keyReleased(e);
+				int key = e.getKeyCode();
+				
+				if (key == KeyEvent.VK_LEFT) {
+					vp.showNext();
+					
+				} else if (key == KeyEvent.VK_RIGHT) {
+					vp.showPrevious();
+				}
+			}
+		});
+		
+		f.add(new JScrollPane(vp));
 		f.pack();
 		f.setVisible(true);
 	}
