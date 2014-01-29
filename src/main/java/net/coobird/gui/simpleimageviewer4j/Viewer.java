@@ -137,8 +137,8 @@ public class Viewer {
 	
 	private class NavigationPanel extends JPanel implements ViewerChangeListener {
 
-		private final JButton prevButton = new JButton("Previous");
-		private final JButton nextButton = new JButton("Next");
+		private final JButton prevButton = new JButton("<");
+		private final JButton nextButton = new JButton(">");
 		private final JLabel indicator;
 		private final ViewerPanel vp;
 		
