@@ -48,11 +48,21 @@ public class Viewer {
 	
 	private class ViewerPanel extends JPanel {
 		private int index = 0;
+		private List<BufferedImage> images;
 		private BufferedImage curImage;
 		private List<ViewerChangeListener> listeners = new ArrayList<ViewerChangeListener>();
 		
-		public ViewerPanel() {
-			curImage = images.get(index);
+		public ViewerPanel(List<BufferedImage> images) {
+			// We'll keep a separate instance of the list, so that changes to
+			// the original list will not immediately apply to the images
+			// that this class knows of.
+			//
+			// If adding/removing images are required, a separate interface
+			// should be provided, which should keep track of the internal
+			// state correctly. (Such as calling all listeners.)
+			this.images = new ArrayList<BufferedImage>(images);
+			
+			curImage = this.images.get(index);
 		}
 		
 		/**
@@ -197,7 +207,7 @@ public class Viewer {
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setLayout(new BorderLayout());
 		
-		final ViewerPanel vp = new ViewerPanel();
+		final ViewerPanel vp = new ViewerPanel(this.images);
 		f.addKeyListener(new KeyNavigation(vp));
 		// This will allow focus on the Frame after clicking on one of the
 		// navigation buttons. This will subsequently allow use of keyboard
