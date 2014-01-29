@@ -1,6 +1,7 @@
 package net.coobird.gui.simpleimageviewer4j;
 
 import java.awt.Dimension;
+import java.awt.DisplayMode;
 import java.awt.Graphics;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -66,7 +67,6 @@ public class Viewer {
 	public void show() {
 		JFrame f = new JFrame("Simple Image Viewer");
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		f.setLocation(100, 100);
 		
 		final ViewerPanel vp = new ViewerPanel();
 		f.addKeyListener(new KeyAdapter() {
@@ -86,6 +86,18 @@ public class Viewer {
 		
 		f.add(new JScrollPane(vp));
 		f.pack();
+		
+		int frameWidth = f.getWidth();
+		int frameHeight = f.getHeight();
+		
+		DisplayMode displayMode = f.getGraphicsConfiguration().getDevice().getDisplayMode();
+		int screenWidth = displayMode.getWidth();
+		int screenHeight = displayMode.getHeight();
+		
+		int x = (screenWidth / 2) - (frameWidth / 2);
+		int y = (screenHeight / 2) - (frameHeight / 2);
+		f.setLocation(x, y);
+		
 		f.setVisible(true);
 	}
 	
