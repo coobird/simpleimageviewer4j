@@ -82,7 +82,7 @@ public final class Viewer {
 		public void imageChanged();
 	}
 	
-	private class ViewerPanel extends JPanel {
+	private final class ViewerPanel extends JPanel {
 		private int index = 0;
 		private List<BufferedImage> images;
 		private BufferedImage curImage;
@@ -172,7 +172,7 @@ public final class Viewer {
 		}
 	}
 	
-	private class NavigationPanel extends JPanel implements ViewerChangeListener {
+	private final class NavigationPanel extends JPanel implements ViewerChangeListener {
 
 		private final JButton prevButton = new JButton("<");
 		private final JButton nextButton = new JButton(">");
