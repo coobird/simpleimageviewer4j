@@ -12,7 +12,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -30,6 +32,14 @@ public class Viewer {
 		}
 		
 		this.images = Arrays.asList(images);
+	}
+	
+	public Viewer(Collection<BufferedImage> images) {
+		if (images == null || images.size() == 0) {
+			throw new NullPointerException("Must specify images.");
+		}
+		
+		this.images = new ArrayList<BufferedImage>(images);
 	}
 	
 	private class ViewerPanel extends JPanel {
