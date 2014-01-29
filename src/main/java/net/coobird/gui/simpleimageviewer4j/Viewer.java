@@ -3,6 +3,7 @@ package net.coobird.gui.simpleimageviewer4j;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.DisplayMode;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -19,8 +20,10 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 public class Viewer {
@@ -136,12 +139,17 @@ public class Viewer {
 
 		private final JButton prevButton = new JButton("Previous");
 		private final JButton nextButton = new JButton("Next");
+		private final JLabel indicator;
 		private final ViewerPanel vp;
 		
 		public NavigationPanel(final ViewerPanel vp) {
 			this.vp = vp;
-			
 			this.setLayout(new GridLayout(1, 0));
+			
+			indicator = new JLabel();
+			indicator.setFont(new Font("Monospaced", Font.PLAIN, 14));
+			indicator.setHorizontalAlignment(SwingConstants.CENTER);
+			
 			KeyNavigation kn = new KeyNavigation(vp);
 			
 			prevButton.addActionListener(new ActionListener() {
@@ -159,6 +167,7 @@ public class Viewer {
 			nextButton.addKeyListener(kn);
 			
 			this.add(prevButton);
+			this.add(indicator);
 			this.add(nextButton);
 			
 			updateButtonStates();
@@ -175,6 +184,8 @@ public class Viewer {
 			if (!nextButton.isEnabled() && nextButton.hasFocus()) {
 				prevButton.requestFocus();
 			}
+			
+			indicator.setText("" + (vp.current() + 1) + " / " + vp.count());
 		}
 		
 		public void imageChanged() {
