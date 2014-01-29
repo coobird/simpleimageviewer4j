@@ -62,14 +62,36 @@ new Viewer(images).show();
 public final class Viewer {
 	private final List<BufferedImage> images;
 	
+	/**
+	 * Instantiates a {@code Viewer} instance which will be prepared to
+	 * display the specified images. To display the images, call the
+	 * {@link #show()} or {@link #run()} method on the {@code Viewer}
+	 * instance.
+	 * <p>
+	 * If the argument is passed as an array, changes made to the original
+	 * array will not be visible to the viewer instance.
+	 * 
+	 * @param images The images to display.
+	 */
 	public Viewer(BufferedImage... images) {
 		if (images == null || images.length == 0) {
 			throw new NullPointerException("Must specify images.");
 		}
 		
-		this.images = Arrays.asList(images);
+		this.images = new ArrayList<BufferedImage>(Arrays.asList(images));
 	}
 	
+	/**
+	 * Instantiates a {@code Viewer} instance which will be prepared to
+	 * display the specified images. To display the images, call the
+	 * {@link #show()} or {@link #run()} method on the {@code Viewer}
+	 * instance.
+	 * <p>
+	 * Changes made to the original {@link Collection} will not be visible to
+	 * the viewer instance.
+	 * 
+	 * @param images The images to display.
+	 */
 	public Viewer(Collection<BufferedImage> images) {
 		if (images == null || images.size() == 0) {
 			throw new NullPointerException("Must specify images.");
@@ -250,6 +272,18 @@ public final class Viewer {
 		}
 	}
 	
+	/**
+	 * Displays the graphical image viewer.
+	 * <p><strong>
+	 * Caution: This method should only be called from the AWT Event Dispatch
+	 * Thread (EDT).
+	 * </strong></p>
+	 * <p>
+	 * If there is a need to display the viewer from outside of the EDT,
+	 * either use {@link SwingUtilities#invokeLater(Runnable)} or, use
+	 * the {@link #run()} method which is a convenience method for running
+	 * this method ({@link #show()} method) from the EDT.
+	 */
 	public void show() {
 		final JFrame f = new JFrame("Simple Image Viewer");
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -288,7 +322,13 @@ public final class Viewer {
 		
 		f.setVisible(true);
 	}
-	
+
+	/**
+	 * Displays the graphical image viewer.
+	 * <p>
+	 * This method will ensure that the viewer is created from the AWT Event
+	 * Dispatch Thread (EDT).
+	 */
 	public void run() {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
