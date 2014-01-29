@@ -74,6 +74,7 @@ public class Viewer {
 	private class NavigationPanel extends JPanel {
 		public NavigationPanel(final ViewerPanel vp) {
 			this.setLayout(new GridLayout(1, 0));
+			KeyNavigation kn = new KeyNavigation(vp);
 			
 			JButton prevButton = new JButton("Previous");
 			prevButton.addActionListener(new ActionListener() {
@@ -81,12 +82,15 @@ public class Viewer {
 					vp.showPrevious();
 				}
 			});
+			prevButton.addKeyListener(kn);
+			
 			JButton nextButton = new JButton("Next");
 			nextButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					vp.showNext();
 				}
 			});
+			nextButton.addKeyListener(kn);
 			
 			this.add(prevButton);
 			this.add(nextButton);
