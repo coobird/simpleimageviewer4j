@@ -92,18 +92,22 @@ public class Viewer {
 			return index < images.size() - 1;
 		}
 		
-		public void showPrevious() {
-			index = Math.max(0, --index);
+		private void updateImage(int index) {
 			curImage = images.get(index);
 			notifyListeners();
 			repaint();
 		}
 		
+		public void showPrevious() {
+			if (hasPrevious()) {
+				updateImage(--index);
+			}
+		}
+		
 		public void showNext() {
-			index = Math.min(++index, images.size() - 1);
-			curImage = images.get(index);
-			notifyListeners();
-			repaint();
+			if (hasNext()) {
+				updateImage(++index);
+			}
 		}
 		
 		private void addListener(ViewerChangeListener listener) {
