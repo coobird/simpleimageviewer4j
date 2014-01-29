@@ -55,6 +55,22 @@ public class Viewer {
 			curImage = images.get(index);
 		}
 		
+		/**
+		 * Returns number of images.
+		 * @return Number of images.
+		 */
+		public int count() {
+			return images.size();
+		}
+		
+		/**
+		 * Returns the index of the current image as a zero-based index.
+		 * @return Index of current image.
+		 */
+		public int current() {
+			return index;
+		}
+		
 		public boolean hasPrevious() {
 			return index > 0;
 		}
