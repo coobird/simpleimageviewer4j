@@ -38,13 +38,13 @@ public class Viewer {
 			curImage = images.get(index);
 		}
 		
-		public void showNext() {
+		public void showPrevious() {
 			index = Math.max(0, --index);
 			curImage = images.get(index);
 			repaint();
 		}
 		
-		public void showPrevious() {
+		public void showNext() {
 			index = Math.min(++index, images.size() - 1);
 			curImage = images.get(index);
 			repaint();
