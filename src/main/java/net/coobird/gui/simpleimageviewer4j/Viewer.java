@@ -142,6 +142,7 @@ public class Viewer {
 			prevButton.setEnabled(vp.hasPrevious());
 			nextButton.setEnabled(vp.hasNext());
 			
+			// Prevents leaving focus on button which is disabled.
 			if (!prevButton.isEnabled() && prevButton.hasFocus()) {
 				nextButton.requestFocus();
 			}
