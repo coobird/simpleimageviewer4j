@@ -42,24 +42,49 @@ public class Viewer {
 		this.images = new ArrayList<BufferedImage>(images);
 	}
 	
+	private interface ViewerChangeListener {
+		public void imageChanged();
+	}
+	
 	private class ViewerPanel extends JPanel {
 		private int index = 0;
 		private BufferedImage curImage;
+		private List<ViewerChangeListener> listeners = new ArrayList<ViewerChangeListener>();
 		
 		public ViewerPanel() {
 			curImage = images.get(index);
 		}
 		
+		public boolean hasPrevious() {
+			return index > 0;
+		}
+		
+		public boolean hasNext() {
+			return index < images.size() - 1;
+		}
+		
 		public void showPrevious() {
 			index = Math.max(0, --index);
 			curImage = images.get(index);
+			notifyListeners();
 			repaint();
 		}
 		
 		public void showNext() {
 			index = Math.min(++index, images.size() - 1);
 			curImage = images.get(index);
+			notifyListeners();
 			repaint();
+		}
+		
+		private void addListener(ViewerChangeListener listener) {
+			listeners.add(listener);
+		}
+		
+		private void notifyListeners() {
+			for (ViewerChangeListener listener : listeners) {
+				listener.imageChanged();
+			}
 		}
 		
 		@Override
@@ -81,12 +106,18 @@ public class Viewer {
 		}
 	}
 	
-	private class NavigationPanel extends JPanel {
+	private class NavigationPanel extends JPanel implements ViewerChangeListener {
+
+		private final JButton prevButton = new JButton("Previous");
+		private final JButton nextButton = new JButton("Next");
+		private final ViewerPanel vp;
+		
 		public NavigationPanel(final ViewerPanel vp) {
+			this.vp = vp;
+			
 			this.setLayout(new GridLayout(1, 0));
 			KeyNavigation kn = new KeyNavigation(vp);
 			
-			JButton prevButton = new JButton("Previous");
 			prevButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					vp.showPrevious();
@@ -94,7 +125,6 @@ public class Viewer {
 			});
 			prevButton.addKeyListener(kn);
 			
-			JButton nextButton = new JButton("Next");
 			nextButton.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					vp.showNext();
@@ -104,6 +134,24 @@ public class Viewer {
 			
 			this.add(prevButton);
 			this.add(nextButton);
+			
+			updateButtonStates();
+		}
+		
+		private void updateButtonStates() {
+			prevButton.setEnabled(vp.hasPrevious());
+			nextButton.setEnabled(vp.hasNext());
+			
+			if (!prevButton.isEnabled() && prevButton.hasFocus()) {
+				nextButton.requestFocus();
+			}
+			if (!nextButton.isEnabled() && nextButton.hasFocus()) {
+				prevButton.requestFocus();
+			}
+		}
+		
+		public void imageChanged() {
+			updateButtonStates();
 		}
 	}
 	
@@ -145,8 +193,11 @@ public class Viewer {
 			}
 		});
 		
+		final NavigationPanel np = new NavigationPanel(vp);
+		vp.addListener(np);
+		
 		f.add(new JScrollPane(vp), BorderLayout.CENTER);
-		f.add(new NavigationPanel(vp), BorderLayout.SOUTH);
+		f.add(np, BorderLayout.SOUTH);
 		f.pack();
 		
 		int frameWidth = f.getWidth();
