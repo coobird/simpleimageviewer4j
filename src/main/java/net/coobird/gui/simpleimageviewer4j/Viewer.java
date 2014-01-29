@@ -26,7 +26,40 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
-public class Viewer {
+/**
+ * <h1>simpleimageviewer4j - a simple image viewer</h1>
+ * <p>
+ * The purpose of this class is to provide a simple way to display images
+ * in Java (using Swing) to aid in debugging applications which manipulate
+ * images.
+ * </p>
+ * <p>
+ * A simple usage would be to specify images to display like the following:
+ * </p>
+ * <pre>
+// Images that we're working on.
+BufferedImage img1 = ...
+BufferedImage img2 = ...
+
+// A window to view `img1` and `img2` will be shown.
+new Viewer(img1, img2).show();
+</pre>
+ * <p>
+ * Using a Collection (such as a List) to specify images to display is
+ * also supported:
+ * </p>
+ * <pre>
+// A `List` containing images that we're working on.
+List&lt;BufferedImage&gt; images = ...
+
+// A window to view images contained in `images` will be shown.
+new Viewer(images).show();
+</pre>
+ * 
+ * @author coobird
+ *
+ */
+public final class Viewer {
 	private final List<BufferedImage> images;
 	
 	public Viewer(BufferedImage... images) {
