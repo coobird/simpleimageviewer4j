@@ -93,26 +93,33 @@ public class Viewer {
 		}
 	}
 	
+	private final class KeyNavigation extends KeyAdapter {
+		private final ViewerPanel vp;
+
+		private KeyNavigation(ViewerPanel vp) {
+			this.vp = vp;
+		}
+
+		@Override
+		public void keyReleased(KeyEvent e) {
+			int key = e.getKeyCode();
+			
+			if (key == KeyEvent.VK_LEFT) {
+				vp.showPrevious();
+				
+			} else if (key == KeyEvent.VK_RIGHT) {
+				vp.showNext();
+			}
+		}
+	}
+	
 	public void show() {
 		final JFrame f = new JFrame("Simple Image Viewer");
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setLayout(new BorderLayout());
 		
 		final ViewerPanel vp = new ViewerPanel();
-		f.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyReleased(KeyEvent e) {
-				super.keyReleased(e);
-				int key = e.getKeyCode();
-				
-				if (key == KeyEvent.VK_LEFT) {
-					vp.showPrevious();
-					
-				} else if (key == KeyEvent.VK_RIGHT) {
-					vp.showNext();
-				}
-			}
-		});
+		f.addKeyListener(new KeyNavigation(vp));
 		// This will allow focus on the Frame after clicking on one of the
 		// navigation buttons. This will subsequently allow use of keyboard
 		// to change the images.
