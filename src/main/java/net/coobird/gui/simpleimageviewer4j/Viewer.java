@@ -106,10 +106,10 @@ public class Viewer {
 				int key = e.getKeyCode();
 				
 				if (key == KeyEvent.VK_LEFT) {
-					vp.showNext();
+					vp.showPrevious();
 					
 				} else if (key == KeyEvent.VK_RIGHT) {
-					vp.showPrevious();
+					vp.showNext();
 				}
 			}
 		});
