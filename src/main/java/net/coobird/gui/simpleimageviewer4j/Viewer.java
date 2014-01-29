@@ -1,14 +1,19 @@
 package net.coobird.gui.simpleimageviewer4j;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.DisplayMode;
 import java.awt.Graphics;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -64,9 +69,32 @@ public class Viewer {
 		}
 	}
 	
+	private class NavigationPanel extends JPanel {
+		public NavigationPanel(final ViewerPanel vp) {
+			this.setLayout(new GridLayout(1, 0));
+			
+			JButton prevButton = new JButton("Previous");
+			prevButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					vp.showPrevious();
+				}
+			});
+			JButton nextButton = new JButton("Next");
+			nextButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					vp.showNext();
+				}
+			});
+			
+			this.add(prevButton);
+			this.add(nextButton);
+		}
+	}
+	
 	public void show() {
 		JFrame f = new JFrame("Simple Image Viewer");
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		f.setLayout(new BorderLayout());
 		
 		final ViewerPanel vp = new ViewerPanel();
 		f.addKeyListener(new KeyAdapter() {
@@ -84,7 +112,8 @@ public class Viewer {
 			}
 		});
 		
-		f.add(new JScrollPane(vp));
+		f.add(new JScrollPane(vp), BorderLayout.CENTER);
+		f.add(new NavigationPanel(vp), BorderLayout.SOUTH);
 		f.pack();
 		
 		int frameWidth = f.getWidth();
