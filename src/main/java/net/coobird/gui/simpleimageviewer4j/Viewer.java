@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.List;
@@ -92,7 +94,7 @@ public class Viewer {
 	}
 	
 	public void show() {
-		JFrame f = new JFrame("Simple Image Viewer");
+		final JFrame f = new JFrame("Simple Image Viewer");
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setLayout(new BorderLayout());
 		
@@ -109,6 +111,16 @@ public class Viewer {
 				} else if (key == KeyEvent.VK_RIGHT) {
 					vp.showPrevious();
 				}
+			}
+		});
+		// This will allow focus on the Frame after clicking on one of the
+		// navigation buttons. This will subsequently allow use of keyboard
+		// to change the images.
+		vp.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				super.mouseReleased(e);
+				f.requestFocus();
 			}
 		});
 		
