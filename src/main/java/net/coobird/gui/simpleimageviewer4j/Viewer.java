@@ -286,7 +286,7 @@ public final class Viewer {
 	 */
 	public void show() {
 		final JFrame f = new JFrame("Simple Image Viewer");
-		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		f.setLayout(new BorderLayout());
 		
 		final ViewerPanel vp = new ViewerPanel(this.images);
