@@ -151,6 +151,11 @@ public final class Viewer {
 			curImage = images.get(index);
 			notifyListeners();
 			repaint();
+
+			// Forces layout of parent, so that the scrollbar will appear when
+			// displaying a large image.
+			// doLayout() forces a call to getPreferredSize and getLocation.
+			this.getParent().doLayout();
 		}
 		
 		public void showPrevious() {
