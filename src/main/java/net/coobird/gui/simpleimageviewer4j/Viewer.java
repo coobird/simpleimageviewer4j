@@ -6,6 +6,7 @@ import java.awt.DisplayMode;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -151,7 +152,11 @@ public final class Viewer {
 			curImage = images.get(index);
 			notifyListeners();
 			repaint();
-
+			
+			int x = -(curImage.getWidth() / 2) + (this.getWidth() / 2);
+			int y = -(curImage.getHeight() / 2) + (this.getHeight() / 2);
+			this.setLocation(new Point(x,y));
+			
 			// Forces layout of parent, so that the scrollbar will appear when
 			// displaying a large image.
 			// doLayout() forces a call to getPreferredSize and getLocation.
