@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -174,6 +175,67 @@ public class ViewerTest {
 		BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 		BufferedImage img2 = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 		Set<BufferedImage> images = new HashSet<BufferedImage>(Arrays.asList(img, img2));
+		
+		// when, then
+		new Viewer(images);
+	}
+	
+	@Test(expected=NullPointerException.class)
+	public void constructorGivenNullSingleBufferedImage() {
+		// given
+		BufferedImage img = null;
+		
+		// when, then
+		new Viewer(img);
+	}
+	
+	@Test(expected=NullPointerException.class)
+	public void constructorBufferedImagesFirstIsNull() {
+		// given
+		BufferedImage img = null;
+		BufferedImage img2 = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+		
+		// when, then
+		new Viewer(img, img2);
+	}
+	
+	@Test(expected=NullPointerException.class)
+	public void constructorBufferedImagesLastIsNull() {
+		// given
+		BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage img2 = null;
+		
+		// when, then
+		new Viewer(img, img2);
+	}
+	
+	@Test(expected=NullPointerException.class)
+	public void constructorGivenNullSingleBufferedImageAsCollection() {
+		// given
+		BufferedImage img = null;
+		Collection<BufferedImage> images = Arrays.asList(img);
+		
+		// when, then
+		new Viewer(images);
+	}
+	
+	@Test(expected=NullPointerException.class)
+	public void constructorBufferedImagesAsCollectionFirstIsNull() {
+		// given
+		BufferedImage img = null;
+		BufferedImage img2 = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+		Collection<BufferedImage> images = Arrays.asList(img, img2);
+		
+		// when, then
+		new Viewer(images);
+	}
+	
+	@Test(expected=NullPointerException.class)
+	public void constructorBufferedImagesAsCollectionLastIsNull() {
+		// given
+		BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage img2 = null;
+		Collection<BufferedImage> images = Arrays.asList(img, img2);
 		
 		// when, then
 		new Viewer(images);
