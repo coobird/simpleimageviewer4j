@@ -63,6 +63,14 @@ new Viewer(images).show();
 public final class Viewer {
 	private final List<BufferedImage> images;
 	
+	private void checkImagesForNull() {
+		for (BufferedImage image : images) {
+			if (image == null) {
+				throw new NullPointerException("A null image was provided.");
+			}
+		}
+	}
+	
 	/**
 	 * Instantiates a {@code Viewer} instance which will be prepared to
 	 * display the specified images. To display the images, call the
@@ -80,6 +88,7 @@ public final class Viewer {
 		}
 		
 		this.images = new ArrayList<BufferedImage>(Arrays.asList(images));
+		checkImagesForNull();
 	}
 	
 	/**
@@ -99,6 +108,7 @@ public final class Viewer {
 		}
 		
 		this.images = new ArrayList<BufferedImage>(images);
+		checkImagesForNull();
 	}
 	
 	private interface ViewerChangeListener {
