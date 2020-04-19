@@ -9,33 +9,33 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public final class NavigationPanel extends JPanel implements ViewerChangeListener {
+public final class NavigationPanel extends JPanel implements DisplayChangeListener {
 
 	private final JButton prevButton = new JButton("<");
 	private final JButton nextButton = new JButton(">");
 	private final JLabel indicator;
-	private final DisplayPanel vp;
+	private final DisplayPanel dp;
 
-	public NavigationPanel(final DisplayPanel vp) {
-		this.vp = vp;
+	public NavigationPanel(final DisplayPanel dp) {
+		this.dp = dp;
 		this.setLayout(new GridLayout(1, 0));
 
 		indicator = new JLabel();
 		indicator.setFont(new Font("Monospaced", Font.PLAIN, 14));
 		indicator.setHorizontalAlignment(SwingConstants.CENTER);
 
-		KeyNavigation kn = new KeyNavigation(vp);
+		KeyNavigation kn = new KeyNavigation(dp);
 
 		prevButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				vp.showPrevious();
+				dp.showPrevious();
 			}
 		});
 		prevButton.addKeyListener(kn);
 
 		nextButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				vp.showNext();
+				dp.showNext();
 			}
 		});
 		nextButton.addKeyListener(kn);
@@ -48,8 +48,8 @@ public final class NavigationPanel extends JPanel implements ViewerChangeListene
 	}
 
 	private void updateButtonStates() {
-		prevButton.setEnabled(vp.hasPrevious());
-		nextButton.setEnabled(vp.hasNext());
+		prevButton.setEnabled(dp.hasPrevious());
+		nextButton.setEnabled(dp.hasNext());
 
 		// Prevents leaving focus on button which is disabled.
 		if (!prevButton.isEnabled() && prevButton.hasFocus()) {
@@ -59,7 +59,7 @@ public final class NavigationPanel extends JPanel implements ViewerChangeListene
 			prevButton.requestFocus();
 		}
 
-		indicator.setText("" + (vp.current() + 1) + " / " + vp.count());
+		indicator.setText("" + (dp.current() + 1) + " / " + dp.count());
 	}
 
 	public void imageChanged() {

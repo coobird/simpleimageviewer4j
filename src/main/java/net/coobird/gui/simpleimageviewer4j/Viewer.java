@@ -1,13 +1,9 @@
 package net.coobird.gui.simpleimageviewer4j;
 
-import net.coobird.gui.simpleimageviewer4j.component.DisplayPanel;
-import net.coobird.gui.simpleimageviewer4j.component.KeyNavigation;
-import net.coobird.gui.simpleimageviewer4j.component.NavigationPanel;
+import net.coobird.gui.simpleimageviewer4j.component.ViewerPanel;
 
 import java.awt.BorderLayout;
 import java.awt.DisplayMode;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,7 +11,6 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.swing.JFrame;
-import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
 /**
@@ -119,24 +114,7 @@ public final class Viewer {
 		f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		f.setLayout(new BorderLayout());
 
-		final DisplayPanel dp = new DisplayPanel(this.images);
-		f.addKeyListener(new KeyNavigation(dp));
-		// This will allow focus on the Frame after clicking on one of the
-		// navigation buttons. This will subsequently allow use of keyboard
-		// to change the images.
-		dp.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				super.mouseReleased(e);
-				f.requestFocus();
-			}
-		});
-		
-		final NavigationPanel np = new NavigationPanel(dp);
-		dp.addListener(np);
-		
-		f.add(new JScrollPane(dp), BorderLayout.CENTER);
-		f.add(np, BorderLayout.SOUTH);
+		f.add(new ViewerPanel(images), BorderLayout.CENTER);
 		f.pack();
 		
 		int frameWidth = f.getWidth();

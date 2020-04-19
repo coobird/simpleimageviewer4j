@@ -12,7 +12,7 @@ public final class DisplayPanel extends JPanel {
 	private int index = 0;
 	private List<BufferedImage> images;
 	private BufferedImage curImage;
-	private List<ViewerChangeListener> listeners = new ArrayList<ViewerChangeListener>();
+	private List<DisplayChangeListener> listeners = new ArrayList<DisplayChangeListener>();
 
 	public DisplayPanel(List<BufferedImage> images) {
 		// We'll keep a separate instance of the list, so that changes to
@@ -78,12 +78,12 @@ public final class DisplayPanel extends JPanel {
 		}
 	}
 
-	public void addListener(ViewerChangeListener listener) {
+	public void addListener(DisplayChangeListener listener) {
 		listeners.add(listener);
 	}
 
 	private void notifyListeners() {
-		for (ViewerChangeListener listener : listeners) {
+		for (DisplayChangeListener listener : listeners) {
 			listener.imageChanged();
 		}
 	}

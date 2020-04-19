@@ -4,10 +4,10 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public final class KeyNavigation extends KeyAdapter {
-	private final DisplayPanel vp;
+	private final DisplayPanel dp;
 
-	public KeyNavigation(DisplayPanel vp) {
-		this.vp = vp;
+	public KeyNavigation(DisplayPanel dp) {
+		this.dp = dp;
 	}
 
 	@Override
@@ -15,10 +15,10 @@ public final class KeyNavigation extends KeyAdapter {
 		int key = e.getKeyCode();
 
 		if (key == KeyEvent.VK_LEFT) {
-			vp.showPrevious();
+			dp.showPrevious();
 
 		} else if (key == KeyEvent.VK_RIGHT) {
-			vp.showNext();
+			dp.showNext();
 		}
 	}
 }
