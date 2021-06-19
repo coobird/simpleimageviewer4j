@@ -1,9 +1,11 @@
 package net.coobird.gui.simpleimageviewer4j.component;
 
 import javax.swing.JPanel;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
@@ -88,6 +90,28 @@ public final class DisplayPanel extends JPanel {
 		}
 	}
 
+	private static final int CHECKER_WIDTH = 10;
+	private static final int CHECKER_HEIGHT = 10;
+
+	private void drawBackground(Graphics g) {
+		Rectangle visibleRect = this.getVisibleRect();
+		int width = visibleRect.x + visibleRect.width;
+		int height = visibleRect.y + visibleRect.height;
+		int startX = (visibleRect.x / (CHECKER_WIDTH * 2)) * (CHECKER_WIDTH * 2);
+		int startY = (visibleRect.y / (CHECKER_HEIGHT * 2)) * (CHECKER_HEIGHT * 2);
+
+		g.setColor(Color.gray);
+		g.fillRect(visibleRect.x, visibleRect.y, visibleRect.width, visibleRect.height);
+
+		g.setColor(Color.lightGray);
+		for (int j = startY; j <= height; j += CHECKER_HEIGHT * 2) {
+			for (int i = startX; i <= width; i += CHECKER_WIDTH * 2) {
+				g.fillRect(i, j, CHECKER_WIDTH, CHECKER_HEIGHT);
+				g.fillRect(i + CHECKER_WIDTH, j + CHECKER_HEIGHT, CHECKER_WIDTH, CHECKER_HEIGHT);
+			}
+		}
+	}
+
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -98,6 +122,7 @@ public final class DisplayPanel extends JPanel {
 		x = Math.max(0, x);
 		y = Math.max(0, y);
 
+		drawBackground(g);
 		g.drawImage(curImage, x, y, null);
 	}
 
