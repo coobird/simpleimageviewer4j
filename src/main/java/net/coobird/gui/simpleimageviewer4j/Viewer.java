@@ -16,9 +16,9 @@ import javax.swing.SwingUtilities;
 /**
  * <h1>simpleimageviewer4j - a simple image viewer</h1>
  * <p>
- * The purpose of this class is to provide a simple way to display images
- * in Java (using Swing) to aid in debugging applications which manipulate
- * images.
+ * This class provides a simple way to display images in Java, using Swing.
+ * It's intended to aid in debugging applications which manipulate images
+ * while developing on a desktop environment.
  * </p>
  * <p>
  * A simple usage would be to specify images to display like the following:
