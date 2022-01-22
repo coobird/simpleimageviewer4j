@@ -38,12 +38,12 @@ import javax.swing.SwingUtilities;
 /**
  * <h1>simpleimageviewer4j - a simple image viewer</h1>
  * <p>
- * This class provides a simple way to display images in Java, using Swing.
+ * This class provides a simple way to display images in Java using Swing.
  * It's intended to aid in debugging applications which manipulate images
  * while developing on a desktop environment.
  * </p>
  * <p>
- * A simple usage would be to specify images to display like the following:
+ * A simple usage is to specify images to display like this:
  * </p>
  * <pre>
 // Images that we're working on.
@@ -126,10 +126,10 @@ public final class Viewer {
 	 * Thread (EDT).
 	 * </strong></p>
 	 * <p>
-	 * If there is a need to display the viewer from outside of the EDT,
+	 * If it is necessary to display the viewer from outside the EDT,
 	 * either use {@link SwingUtilities#invokeLater(Runnable)} or, use
 	 * the {@link #run()} method which is a convenience method for running
-	 * this method ({@link #show()} method) from the EDT.
+	 * this method from the EDT.
 	 */
 	public void show() {
 		final JFrame f = new JFrame("Simple Image Viewer");
