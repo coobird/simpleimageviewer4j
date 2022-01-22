@@ -38,7 +38,7 @@ Simply add the following to the `<dependencies>` section of the POM:
 <dependency>
 	<groupId>net.coobird.gui.simpleimageviewer4j</groupId>
 	<artifactId>simpleimageviewer4j</artifactId>
-	<version>0.1.0</version>
+	<version>0.1.1</version>
 	<scope>jar</scope>
 </dependency>
 ```
