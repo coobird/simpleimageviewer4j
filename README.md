@@ -49,6 +49,10 @@ Features
 * Simple API to easily specify images to view.
 * Swing UI to cycle through images with mouse and keyboard navigation.
 
+Documentation
+-------------
+
+* [Documentation](https://coobird.github.io/simpleimageviewer4j/javadoc/0.1.1/)
 
 Planned features
 ----------------
