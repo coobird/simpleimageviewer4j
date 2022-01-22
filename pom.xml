@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.coobird.gui.simpleimageviewer4j</groupId>
 	<artifactId>simpleimageviewer4j</artifactId>
-	<version>0.1.0</version>
+	<version>0.1.1</version>
 	<packaging>jar</packaging>
 
 	<name>simpleimageviewer4j</name>
@@ -46,17 +46,33 @@
 	<build>
 		<plugins>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.0</version>
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
+					<debug>true</debug>
+					<debuglevel>lines</debuglevel>
 				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>2.2.1</version>
+				<version>2.4</version>
+				<configuration>
+					<archive>
+						<manifestEntries>
+							<Specification-Title>simpleimageviewer4j sources</Specification-Title>
+							<Specification-Version>${project.version}</Specification-Version>
+							<Specification-Vendor>coobird.net</Specification-Vendor>
+							<Implementation-Title>simpleimageviewer4j sources</Implementation-Title>
+							<Implementation-Version>${project.version}</Implementation-Version>
+							<Implementation-Vendor>coobird.net</Implementation-Vendor>
+						</manifestEntries>
+					</archive>
+					<excludeResources>false</excludeResources>
+				</configuration>
 				<executions>
 					<execution>
 						<id>attach-sources</id>
@@ -69,7 +85,31 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.9.1</version>
+				<version>2.10.1</version>
+				<configuration>
+					<doctitle>simpleimageviewer4j Documentation (Version ${project.version})</doctitle>
+					<windowtitle>simpleimageviewer4j Documentation (Version ${project.version})</windowtitle>
+					<locale>en_US</locale>
+					<show>public</show>
+					<use>false</use>
+					<destDir>${project.build.outputDirectory}/javadoc</destDir>
+					<javaApiLinks>
+						<property>
+							<name>api_1.6</name>
+							<value>https://docs.oracle.com/javase/6/docs/api/</value>
+						</property>
+					</javaApiLinks>
+					<archive>
+						<manifestEntries>
+							<Specification-Title>simpleimageviewer4j Documentation</Specification-Title>
+							<Specification-Version>${project.version}</Specification-Version>
+							<Specification-Vendor>coobird.net</Specification-Vendor>
+							<Implementation-Title>simpleimageviewer4j API Documentation</Implementation-Title>
+							<Implementation-Version>${project.version}</Implementation-Version>
+							<Implementation-Vendor>coobird.net</Implementation-Vendor>
+						</manifestEntries>
+					</archive>
+				</configuration>
 				<executions>
 					<execution>
 						<id>attach-javadocs</id>
@@ -77,33 +117,136 @@
 							<goal>jar</goal>
 						</goals>
 					</execution>
+					<execution>
+						<id>site-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+						<phase>site</phase>
+					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.3.1</version>
 				<configuration>
-				<locale>en_US</locale>
+					<archive>
+						<manifestEntries>
+							<Specification-Title>simpleimageviewer4j</Specification-Title>
+							<Specification-Version>${project.version}</Specification-Version>
+							<Specification-Vendor>coobird.net</Specification-Vendor>
+							<Implementation-Title>simpleimageviewer4j</Implementation-Title>
+							<Implementation-Version>${project.version}</Implementation-Version>
+							<Implementation-Vendor>coobird.net</Implementation-Vendor>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.github.github</groupId>
+				<artifactId>site-maven-plugin</artifactId>
+				<version>0.11</version>
+				<configuration>
+					<message>Generated javadoc for simpleimageviewer4j ${project.version}</message>
+					<outputDirectory>${project.build.outputDirectory}/javadoc</outputDirectory>
+					<path>javadoc/${project.version}</path>
+					<merge>true</merge>
+					<noJekyll>true</noJekyll>
+					<server>github</server>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>site</goal>
+						</goals>
+						<phase>site-deploy</phase>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>3.3</version>
+				<configuration>
+					<skip>true</skip>
+					<skipDeploy>true</skipDeploy>
 				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-gpg-plugin</artifactId>
-				<version>1.5</version>
-				<executions>
-					<execution>
-						<id>sign-artifacts</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>sign</goal>
-						</goals>
-					</execution>
-				</executions>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.19</version>
 			</plugin>
 		</plugins>
 	</build>
-	
+
+	<profiles>
+		<profile>
+			<id>release</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-toolchains-plugin</artifactId>
+						<version>1.1</version>
+						<configuration>
+							<toolchains>
+								<jdk>
+									<version>1.6</version>
+								</jdk>
+							</toolchains>
+						</configuration>
+						<executions>
+							<execution>
+								<id>for-release</id>
+								<goals>
+									<goal>toolchain</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>for-javadoc</id>
+								<goals>
+									<goal>toolchain</goal>
+								</goals>
+								<phase>pre-site</phase>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>1.5</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.sonatype.plugins</groupId>
+						<artifactId>nexus-staging-maven-plugin</artifactId>
+						<version>1.6.3</version>
+						<extensions>true</extensions>
+						<configuration>
+							<serverId>ossrh</serverId>
+							<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+							<autoReleaseAfterClose>false</autoReleaseAfterClose>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.11</version>
+			<version>4.13.2</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

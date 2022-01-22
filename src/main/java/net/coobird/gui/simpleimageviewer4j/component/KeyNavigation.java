@@ -20,23 +20,27 @@
  * THE SOFTWARE.
  */
 
-package net.coobird.gui.simpleimageviewer4j;
+package net.coobird.gui.simpleimageviewer4j.component;
 
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
-import javax.imageio.ImageIO;
+public final class KeyNavigation extends KeyAdapter {
+	private final DisplayPanel dp;
 
-public class Driver {
-	private static BufferedImage getImage(String res) throws IOException {
-		InputStream is = ClassLoader.getSystemResourceAsStream(res);
-		BufferedImage img = ImageIO.read(is);
-		is.close();
-		return img;
+	public KeyNavigation(DisplayPanel dp) {
+		this.dp = dp;
 	}
-	
-	public static void main(String[] args) throws IOException {
-		new Viewer(getImage("grid.png"), getImage("igrid.png")).show();
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		int key = e.getKeyCode();
+
+		if (key == KeyEvent.VK_LEFT) {
+			dp.showPrevious();
+
+		} else if (key == KeyEvent.VK_RIGHT) {
+			dp.showNext();
+		}
 	}
 }

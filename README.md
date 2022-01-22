@@ -38,7 +38,7 @@ Simply add the following to the `<dependencies>` section of the POM:
 <dependency>
 	<groupId>net.coobird.gui.simpleimageviewer4j</groupId>
 	<artifactId>simpleimageviewer4j</artifactId>
-	<version>0.1.0</version>
+	<version>0.1.1</version>
 	<scope>jar</scope>
 </dependency>
 ```
@@ -49,6 +49,10 @@ Features
 * Simple API to easily specify images to view.
 * Swing UI to cycle through images with mouse and keyboard navigation.
 
+Documentation
+-------------
+
+* [Documentation](https://coobird.github.io/simpleimageviewer4j/javadoc/0.1.1/)
 
 Planned features
 ----------------

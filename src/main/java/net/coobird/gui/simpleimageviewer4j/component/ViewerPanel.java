@@ -20,23 +20,35 @@
  * THE SOFTWARE.
  */
 
-package net.coobird.gui.simpleimageviewer4j;
+package net.coobird.gui.simpleimageviewer4j.component;
 
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import java.awt.BorderLayout;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
+import java.util.List;
 
-import javax.imageio.ImageIO;
+public final class ViewerPanel extends JPanel {
 
-public class Driver {
-	private static BufferedImage getImage(String res) throws IOException {
-		InputStream is = ClassLoader.getSystemResourceAsStream(res);
-		BufferedImage img = ImageIO.read(is);
-		is.close();
-		return img;
-	}
-	
-	public static void main(String[] args) throws IOException {
-		new Viewer(getImage("grid.png"), getImage("igrid.png")).show();
+	/**
+	 * Instantiates a {@code ViewerPanel} instance which will be prepared to
+	 * display the specified images.
+	 * <p>
+	 * Changes made to the original {@link List} will not be visible to
+	 * the viewer instance.
+	 *
+	 * @param images The images to display.
+	 */
+	public ViewerPanel(List<BufferedImage> images) {
+		this.setLayout(new BorderLayout());
+
+		final DisplayPanel dp = new DisplayPanel(images);
+		this.addKeyListener(new KeyNavigation(dp));
+
+		final NavigationPanel np = new NavigationPanel(dp);
+		dp.addListener(np);
+
+		this.add(new JScrollPane(dp), BorderLayout.CENTER);
+		this.add(np, BorderLayout.SOUTH);
 	}
 }
