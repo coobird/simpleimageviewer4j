@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2022 Chris Kroells
+ * Copyright (c) 2014-2023 Chris Kroells
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -33,6 +33,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class DisplayPanel extends JPanel {
+
+	private static class Zoom {
+		private static final double[] ZOOM_LEVELS = new double[] { 0.25, 0.5, 1.0, 2.0, 4.0 };
+		private static final int DEFAULT_ZOOM = 2;
+		private int zoomIndex = DEFAULT_ZOOM;
+
+		private void zoomIn() {
+			if (zoomIndex < ZOOM_LEVELS.length - 1) {
+				zoomIndex++;
+			}
+		}
+
+		private void zoomOut() {
+			if (zoomIndex > 0) {
+				zoomIndex--;
+			}
+		}
+
+		private double getMagnification() {
+			return ZOOM_LEVELS[zoomIndex];
+		}
+	}
+
+	private Zoom zoom = new Zoom();
 	private int index = 0;
 	private List<BufferedImage> images;
 	private BufferedImage curImage;
@@ -102,6 +126,22 @@ public final class DisplayPanel extends JPanel {
 		}
 	}
 
+	public void zoomIn() {
+		zoom.zoomIn();
+		this.repaint();
+		notifyListeners();
+	}
+
+	public void zoomOut() {
+		zoom.zoomOut();
+		this.repaint();
+		notifyListeners();
+	}
+
+	public double getMagnification() {
+		return zoom.getMagnification();
+	}
+
 	public void addListener(DisplayChangeListener listener) {
 		listeners.add(listener);
 	}
@@ -138,14 +178,17 @@ public final class DisplayPanel extends JPanel {
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
+		int width = (int)Math.round(curImage.getWidth() * zoom.getMagnification());
+		int height = (int)Math.round(curImage.getHeight() * zoom.getMagnification());
+
 		// Center image, but show scrollbars when smaller than window.
-		int x = (this.getWidth() / 2) - (curImage.getWidth() / 2);
-		int y = (this.getHeight() / 2) - (curImage.getHeight() / 2);
+		int x = (this.getWidth() / 2) - (width / 2);
+		int y = (this.getHeight() / 2) - (height / 2);
 		x = Math.max(0, x);
 		y = Math.max(0, y);
 
 		drawBackground(g);
-		g.drawImage(curImage, x, y, null);
+		g.drawImage(curImage, x, y, width, height, null);
 	}
 
 	@Override

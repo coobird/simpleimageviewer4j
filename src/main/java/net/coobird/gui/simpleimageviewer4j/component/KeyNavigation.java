@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2022 Chris Kroells
+ * Copyright (c) 2014-2023 Chris Kroells
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -35,12 +35,19 @@ public final class KeyNavigation extends KeyAdapter {
 	@Override
 	public void keyReleased(KeyEvent e) {
 		int key = e.getKeyCode();
+		char c = e.getKeyChar();
 
 		if (key == KeyEvent.VK_LEFT) {
 			dp.showPrevious();
 
 		} else if (key == KeyEvent.VK_RIGHT) {
 			dp.showNext();
+
+		} else if (c == '+') {
+			dp.zoomIn();
+
+		} else if (c == '-') {
+			dp.zoomOut();
 		}
 	}
 }

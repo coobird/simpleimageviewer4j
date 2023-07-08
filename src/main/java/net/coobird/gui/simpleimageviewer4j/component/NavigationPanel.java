@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2022 Chris Kroells
+ * Copyright (c) 2014-2023 Chris Kroells
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -81,7 +81,14 @@ public final class NavigationPanel extends JPanel implements DisplayChangeListen
 			prevButton.requestFocus();
 		}
 
-		indicator.setText("" + (dp.current() + 1) + " / " + dp.count());
+		indicator.setText(
+				String.format(
+						"%d / %d (%d%%)",
+						dp.current() + 1,
+						dp.count(),
+						Math.round(dp.getMagnification() * 100.0)
+				)
+		);
 	}
 
 	public void imageChanged() {
