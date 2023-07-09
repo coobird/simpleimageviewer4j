@@ -22,6 +22,8 @@
 
 package net.coobird.gui.simpleimageviewer4j.component;
 
+import net.coobird.gui.simpleimageviewer4j.util.Cache;
+import net.coobird.gui.simpleimageviewer4j.util.Pair;
 import net.coobird.thumbnailator.Thumbnails;
 
 import javax.swing.JPanel;
@@ -31,9 +33,9 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 public final class DisplayPanel extends JPanel {
 
@@ -177,13 +179,16 @@ public final class DisplayPanel extends JPanel {
 		}
 	}
 
+	private final Cache<Pair<BufferedImage, Double>, BufferedImage> cache =
+			new Cache<Pair<BufferedImage, Double>, BufferedImage>();
+
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
 		double magnification = zoom.getMagnification();
-		int width = (int)Math.round(curImage.getWidth() * magnification);
-		int height = (int)Math.round(curImage.getHeight() * magnification);
+		final int width = (int)Math.round(curImage.getWidth() * magnification);
+		final int height = (int)Math.round(curImage.getHeight() * magnification);
 
 		// Center image, but show scrollbars when smaller than window.
 		int x = (this.getWidth() / 2) - (width / 2);
@@ -194,14 +199,19 @@ public final class DisplayPanel extends JPanel {
 		drawBackground(g);
 		if (magnification < 1.0) {
 			try {
-				// TODO Cache smaller images?
-				BufferedImage img = Thumbnails.of(curImage)
-						.size(width, height)
-						.asBufferedImage();
+				Pair<BufferedImage, Double> key = new Pair<BufferedImage, Double>(curImage, magnification);
+				BufferedImage img = cache.computeIfAbsent(key, new Callable<BufferedImage>() {
+					@Override
+					public BufferedImage call() throws Exception {
+						return Thumbnails.of(curImage)
+								.size(width, height)
+								.asBufferedImage();
+					}
+				});
 				g.drawImage(img, x, y, width, height, null);
 
-			} catch (IOException e) {
-				throw new IllegalStateException("This should not happen.");
+			} catch (Exception e) {
+				throw new IllegalStateException("This should not happen.", e);
 			}
 
 		} else {
