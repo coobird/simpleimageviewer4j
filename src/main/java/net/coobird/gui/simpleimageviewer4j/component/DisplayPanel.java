@@ -109,9 +109,9 @@ public final class DisplayPanel extends JPanel {
 		notifyListeners();
 		repaint();
 
-		int x = -(curImage.getWidth() / 2) + (this.getWidth() / 2);
-		int y = -(curImage.getHeight() / 2) + (this.getHeight() / 2);
-		this.setLocation(new Point(x,y));
+		int x = -(getMagnifiedWidth() / 2) + (this.getWidth() / 2);
+		int y = -(getMagnifiedHeight() / 2) + (this.getHeight() / 2);
+		this.setLocation(new Point(x, y));
 
 		// Forces layout of parent, so that the scrollbar will appear when
 		// displaying a large image.
@@ -182,13 +182,21 @@ public final class DisplayPanel extends JPanel {
 	private final Cache<Pair<BufferedImage, Double>, BufferedImage> cache =
 			new Cache<Pair<BufferedImage, Double>, BufferedImage>();
 
+	private int getMagnifiedWidth() {
+		return (int)Math.round(curImage.getWidth() * getMagnification());
+	}
+
+	private int getMagnifiedHeight() {
+		return (int)Math.round(curImage.getHeight() * getMagnification());
+	}
+
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
-		double magnification = zoom.getMagnification();
-		final int width = (int)Math.round(curImage.getWidth() * magnification);
-		final int height = (int)Math.round(curImage.getHeight() * magnification);
+		double magnification = getMagnification();
+		final int width = getMagnifiedWidth();
+		final int height = getMagnifiedHeight();
 
 		// Center image, but show scrollbars when smaller than window.
 		int x = (this.getWidth() / 2) - (width / 2);
@@ -221,6 +229,6 @@ public final class DisplayPanel extends JPanel {
 
 	@Override
 	public Dimension getPreferredSize() {
-		return new Dimension(curImage.getWidth(), curImage.getHeight());
+		return new Dimension(getMagnifiedWidth(), getMagnifiedHeight());
 	}
 }
