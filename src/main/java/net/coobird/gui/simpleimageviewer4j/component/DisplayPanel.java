@@ -22,6 +22,7 @@
 
 package net.coobird.gui.simpleimageviewer4j.component;
 
+import net.coobird.gui.simpleimageviewer4j.model.Zoom;
 import net.coobird.gui.simpleimageviewer4j.util.Cache;
 import net.coobird.gui.simpleimageviewer4j.util.Pair;
 import net.coobird.thumbnailator.Thumbnails;
@@ -39,29 +40,10 @@ import java.util.concurrent.Callable;
 
 public final class DisplayPanel extends JPanel {
 
-	private static class Zoom {
-		private static final double[] ZOOM_LEVELS = new double[] { 0.25, 0.5, 1.0, 2.0, 4.0 };
-		private static final int DEFAULT_ZOOM = 2;
-		private int zoomIndex = DEFAULT_ZOOM;
+	private static final double[] ZOOM_LEVELS = new double[] { 0.25, 0.5, 1.0, 2.0, 4.0 };
+	private static final int DEFAULT_ZOOM = 2;
+	private final Zoom zoom = new Zoom(ZOOM_LEVELS, DEFAULT_ZOOM);
 
-		private void zoomIn() {
-			if (zoomIndex < ZOOM_LEVELS.length - 1) {
-				zoomIndex++;
-			}
-		}
-
-		private void zoomOut() {
-			if (zoomIndex > 0) {
-				zoomIndex--;
-			}
-		}
-
-		private double getMagnification() {
-			return ZOOM_LEVELS[zoomIndex];
-		}
-	}
-
-	private Zoom zoom = new Zoom();
 	private int index = 0;
 	private List<BufferedImage> images;
 	private BufferedImage curImage;
