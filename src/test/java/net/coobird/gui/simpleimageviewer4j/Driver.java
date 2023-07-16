@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2022 Chris Kroells
+ * Copyright (c) 2014-2023 Chris Kroells
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,6 +22,8 @@
 
 package net.coobird.gui.simpleimageviewer4j;
 
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,8 +37,29 @@ public class Driver {
 		is.close();
 		return img;
 	}
+
+	private static BufferedImage makeImage(Color c) {
+		int size = 500;
+		int halfSize = size / 2;
+
+		BufferedImage img = new BufferedImage(size,size, BufferedImage.TYPE_INT_ARGB);
+		Graphics g = img.getGraphics();
+		g.setColor(c);
+		g.fillRect(0, 0, halfSize, size);
+		g.setColor(Color.black);
+		g.fillRect(halfSize, 0, halfSize, size);
+		g.dispose();
+
+		return img;
+	}
 	
 	public static void main(String[] args) throws IOException {
-		new Viewer(getImage("grid.png"), getImage("igrid.png")).show();
+		new Viewer(
+				getImage("grid.png"),
+				makeImage(Color.blue),
+				getImage("igrid.png"),
+				makeImage(Color.green),
+				makeImage(Color.red)
+		).show();
 	}
 }
