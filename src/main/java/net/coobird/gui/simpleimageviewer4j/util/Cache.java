@@ -28,27 +28,27 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 
 public class Cache<K, V> {
-    private final Object lock = new Object();
-    private final Map<K, SoftReference<V>> cache = new HashMap<K, SoftReference<V>>();
+	private final Object lock = new Object();
+	private final Map<K, SoftReference<V>> cache = new HashMap<K, SoftReference<V>>();
 
-    private V computeAndSet(K key, Callable<V> computation) throws Exception {
-        V result = computation.call();
-        cache.put(key, new SoftReference<V>(result));
-        return result;
-    }
+	private V computeAndSet(K key, Callable<V> computation) throws Exception {
+		V result = computation.call();
+		cache.put(key, new SoftReference<V>(result));
+		return result;
+	}
 
-    public V computeIfAbsent(K key, Callable<V> computation) throws Exception {
-        // While this is correct, we're effectively making processing single-threaded.
-        synchronized (lock) {
-            if (!cache.containsKey(key)) {
-                return computeAndSet(key, computation);
-            }
+	public V computeIfAbsent(K key, Callable<V> computation) throws Exception {
+		// While this is correct, we're effectively making processing single-threaded.
+		synchronized (lock) {
+			if (!cache.containsKey(key)) {
+				return computeAndSet(key, computation);
+			}
 
-            V value = cache.get(key).get();
-            if (value == null) {
-                return computeAndSet(key, computation);
-            }
-            return value;
-        }
-    }
+			V value = cache.get(key).get();
+			if (value == null) {
+				return computeAndSet(key, computation);
+			}
+			return value;
+		}
+	}
 }
