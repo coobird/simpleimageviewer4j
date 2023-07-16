@@ -67,6 +67,7 @@ public final class NavigationPanel extends JPanel implements DisplayChangeListen
 		this.add(nextButton);
 
 		updateButtonStates();
+		updateIndicator();
 	}
 
 	private void updateButtonStates() {
@@ -80,7 +81,9 @@ public final class NavigationPanel extends JPanel implements DisplayChangeListen
 		if (!nextButton.isEnabled() && nextButton.hasFocus()) {
 			prevButton.requestFocus();
 		}
+	}
 
+	private void updateIndicator() {
 		indicator.setText(
 				String.format(
 						"%d / %d (%d%%)",
@@ -93,5 +96,6 @@ public final class NavigationPanel extends JPanel implements DisplayChangeListen
 
 	public void imageChanged() {
 		updateButtonStates();
+		updateIndicator();
 	}
 }
