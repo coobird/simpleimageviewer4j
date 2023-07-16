@@ -15,6 +15,36 @@ public class ZoomTest {
 		assertEquals(1.0, zoom.getMagnification(), 0.001);
 	}
 
+	@Test(expected = IllegalArgumentException.class)
+	public void emptyZoomArrayInConstructor() {
+		// given, when, then
+		new Zoom(new double[] {}, 1);
+	}
+
+	@Test(expected = NullPointerException.class)
+	public void nullZoomArrayInConstructor() {
+		// given, when, then
+		new Zoom(null, 1);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void notAscendingZoomArrayInConstructor() {
+		// given, when, then
+		new Zoom(new double[] { 1.0, 0.25, 2.5 }, 1);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void zoomArrayContainsZeroInConstructor() {
+		// given, when, then
+		new Zoom(new double[] { 0.0, 1.0, 2.0 }, 1);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void zoomArrayContainsNegativeInConstructor() {
+		// given, when, then
+		new Zoom(new double[] { -1.0, 1.0, 2.0 }, 1);
+	}
+
 	@Test
 	public void defaultZoomLeftBoundary() {
 		// given
