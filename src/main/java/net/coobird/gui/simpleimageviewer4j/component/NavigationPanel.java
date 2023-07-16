@@ -35,6 +35,8 @@ public final class NavigationPanel extends JPanel implements DisplayChangeListen
 
 	private final JButton prevButton = new JButton("<");
 	private final JButton nextButton = new JButton(">");
+	private final JButton zoomInButton = new JButton("+");
+	private final JButton zoomOutButton = new JButton("-");
 	private final JLabel indicator;
 	private final DisplayPanel dp;
 
@@ -62,9 +64,33 @@ public final class NavigationPanel extends JPanel implements DisplayChangeListen
 		});
 		nextButton.addKeyListener(kn);
 
-		this.add(prevButton);
+		zoomInButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dp.zoomIn();
+			}
+		});
+		zoomInButton.addKeyListener(kn);
+
+		zoomOutButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dp.zoomOut();
+			}
+		});
+		zoomOutButton.addKeyListener(kn);
+
+		JPanel leftPanel = new JPanel(new GridLayout());
+		leftPanel.add(prevButton);
+		leftPanel.add(zoomInButton);
+
+		JPanel rightPanel = new JPanel(new GridLayout());
+		rightPanel.add(zoomOutButton);
+		rightPanel.add(nextButton);
+
+		this.add(leftPanel);
 		this.add(indicator);
-		this.add(nextButton);
+		this.add(rightPanel);
 
 		updateButtonStates();
 		updateIndicator();
@@ -73,8 +99,16 @@ public final class NavigationPanel extends JPanel implements DisplayChangeListen
 	private void updateButtonStates() {
 		prevButton.setEnabled(dp.hasPrevious());
 		nextButton.setEnabled(dp.hasNext());
+		zoomInButton.setEnabled(dp.isZoomInPossible());
+		zoomOutButton.setEnabled(dp.isZoomOutPossible());
 
 		// Prevents leaving focus on button which is disabled.
+		if (!zoomInButton.isEnabled() && zoomInButton.hasFocus()) {
+			zoomOutButton.requestFocus();
+		}
+		if (!zoomOutButton.isEnabled() && zoomOutButton.hasFocus()) {
+			zoomInButton.requestFocus();
+		}
 		if (!prevButton.isEnabled() && prevButton.hasFocus()) {
 			nextButton.requestFocus();
 		}

@@ -114,15 +114,27 @@ public final class DisplayPanel extends JPanel {
 	}
 
 	public void zoomIn() {
-		zoom.zoomIn();
-		this.repaint();
-		notifyListeners();
+		if (zoom.isZoomInPossible()) {
+			zoom.zoomIn();
+			this.repaint();
+			notifyListeners();
+		}
 	}
 
 	public void zoomOut() {
-		zoom.zoomOut();
-		this.repaint();
-		notifyListeners();
+		if (zoom.isZoomOutPossible()) {
+			zoom.zoomOut();
+			this.repaint();
+			notifyListeners();
+		}
+	}
+
+	public boolean isZoomInPossible() {
+		return zoom.isZoomInPossible();
+	}
+
+	public boolean isZoomOutPossible() {
+		return zoom.isZoomOutPossible();
 	}
 
 	public double getMagnification() {

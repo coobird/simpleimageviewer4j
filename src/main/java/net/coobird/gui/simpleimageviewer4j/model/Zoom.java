@@ -14,15 +14,23 @@ public class Zoom {
     }
 
     public void zoomIn() {
-        if (zoomIndex < zoomLevels.length - 1) {
+        if (isZoomInPossible()) {
             zoomIndex++;
         }
     }
 
     public void zoomOut() {
-        if (zoomIndex > 0) {
+        if (isZoomOutPossible()) {
             zoomIndex--;
         }
+    }
+
+    public boolean isZoomInPossible() {
+        return zoomIndex < zoomLevels.length - 1;
+    }
+
+    public boolean isZoomOutPossible() {
+        return zoomIndex > 0;
     }
 
     public double getMagnification() {
