@@ -45,7 +45,7 @@ Simply add the following to the `<dependencies>` section of the POM:
 <dependency>
 	<groupId>net.coobird.gui.simpleimageviewer4j</groupId>
 	<artifactId>simpleimageviewer4j</artifactId>
-	<version>0.1.1</version>
+	<version>0.1.2</version>
 	<scope>jar</scope>
 </dependency>
 ```
@@ -59,7 +59,7 @@ Features
 Documentation
 -------------
 
-* [Documentation](https://coobird.github.io/simpleimageviewer4j/javadoc/0.1.1/)
+* [Documentation](https://coobird.github.io/simpleimageviewer4j/javadoc/0.1.2/)
 
 Planned features
 ----------------
