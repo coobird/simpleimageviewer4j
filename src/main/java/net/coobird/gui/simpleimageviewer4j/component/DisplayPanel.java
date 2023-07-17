@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2022 Chris Kroells
+ * Copyright (c) 2014-2023 Chris Kroells
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,6 +22,11 @@
 
 package net.coobird.gui.simpleimageviewer4j.component;
 
+import net.coobird.gui.simpleimageviewer4j.model.Zoom;
+import net.coobird.gui.simpleimageviewer4j.util.Cache;
+import net.coobird.gui.simpleimageviewer4j.util.Pair;
+import net.coobird.thumbnailator.Thumbnails;
+
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -31,8 +36,14 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 public final class DisplayPanel extends JPanel {
+
+	private static final double[] ZOOM_LEVELS = new double[] { 0.25, 0.5, 1.0, 2.0, 4.0 };
+	private static final int DEFAULT_ZOOM = 2;
+	private final Zoom zoom = new Zoom(ZOOM_LEVELS, DEFAULT_ZOOM);
+
 	private int index = 0;
 	private List<BufferedImage> images;
 	private BufferedImage curImage;
@@ -80,9 +91,9 @@ public final class DisplayPanel extends JPanel {
 		notifyListeners();
 		repaint();
 
-		int x = -(curImage.getWidth() / 2) + (this.getWidth() / 2);
-		int y = -(curImage.getHeight() / 2) + (this.getHeight() / 2);
-		this.setLocation(new Point(x,y));
+		int x = -(getMagnifiedWidth() / 2) + (this.getWidth() / 2);
+		int y = -(getMagnifiedHeight() / 2) + (this.getHeight() / 2);
+		this.setLocation(new Point(x, y));
 
 		// Forces layout of parent, so that the scrollbar will appear when
 		// displaying a large image.
@@ -100,6 +111,34 @@ public final class DisplayPanel extends JPanel {
 		if (hasNext()) {
 			updateImage(++index);
 		}
+	}
+
+	public void zoomIn() {
+		if (zoom.isZoomInPossible()) {
+			zoom.zoomIn();
+			this.repaint();
+			notifyListeners();
+		}
+	}
+
+	public void zoomOut() {
+		if (zoom.isZoomOutPossible()) {
+			zoom.zoomOut();
+			this.repaint();
+			notifyListeners();
+		}
+	}
+
+	public boolean isZoomInPossible() {
+		return zoom.isZoomInPossible();
+	}
+
+	public boolean isZoomOutPossible() {
+		return zoom.isZoomOutPossible();
+	}
+
+	public double getMagnification() {
+		return zoom.getMagnification();
 	}
 
 	public void addListener(DisplayChangeListener listener) {
@@ -134,22 +173,56 @@ public final class DisplayPanel extends JPanel {
 		}
 	}
 
+	private final Cache<Pair<BufferedImage, Double>, BufferedImage> cache =
+			new Cache<Pair<BufferedImage, Double>, BufferedImage>();
+
+	private int getMagnifiedWidth() {
+		return (int)Math.round(curImage.getWidth() * getMagnification());
+	}
+
+	private int getMagnifiedHeight() {
+		return (int)Math.round(curImage.getHeight() * getMagnification());
+	}
+
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
+		double magnification = getMagnification();
+		final int width = getMagnifiedWidth();
+		final int height = getMagnifiedHeight();
+
 		// Center image, but show scrollbars when smaller than window.
-		int x = (this.getWidth() / 2) - (curImage.getWidth() / 2);
-		int y = (this.getHeight() / 2) - (curImage.getHeight() / 2);
+		int x = (this.getWidth() / 2) - (width / 2);
+		int y = (this.getHeight() / 2) - (height / 2);
 		x = Math.max(0, x);
 		y = Math.max(0, y);
 
 		drawBackground(g);
-		g.drawImage(curImage, x, y, null);
+		if (magnification < 1.0) {
+			try {
+				Pair<BufferedImage, Double> key = new Pair<BufferedImage, Double>(curImage, magnification);
+				BufferedImage img = cache.computeIfAbsent(key, new Callable<BufferedImage>() {
+					@Override
+					public BufferedImage call() throws Exception {
+						return Thumbnails.of(curImage)
+								.size(width, height)
+								.asBufferedImage();
+					}
+				});
+				g.drawImage(img, x, y, width, height, null);
+
+			} catch (Exception e) {
+				throw new IllegalStateException("This should not happen.", e);
+			}
+
+		} else {
+			g.drawImage(curImage, x, y, width, height, null);
+		}
 	}
 
 	@Override
 	public Dimension getPreferredSize() {
-		return new Dimension(curImage.getWidth(), curImage.getHeight());
+		return new Dimension(getMagnifiedWidth(), getMagnifiedHeight());
 	}
 }

@@ -20,34 +20,40 @@
  * THE SOFTWARE.
  */
 
-package net.coobird.gui.simpleimageviewer4j.component;
+package net.coobird.gui.simpleimageviewer4j.util;
 
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+public class Pair<U, V> {
+	private final U first;
+	private final V second;
 
-public final class KeyNavigation extends KeyAdapter {
-	private final DisplayPanel dp;
-
-	public KeyNavigation(DisplayPanel dp) {
-		this.dp = dp;
+	public Pair(U first, V second) {
+		this.first = first;
+		this.second = second;
 	}
 
 	@Override
-	public void keyReleased(KeyEvent e) {
-		int key = e.getKeyCode();
-		char c = e.getKeyChar();
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
 
-		if (key == KeyEvent.VK_LEFT) {
-			dp.showPrevious();
+		Pair<?, ?> pair = (Pair<?, ?>) o;
 
-		} else if (key == KeyEvent.VK_RIGHT) {
-			dp.showNext();
+		if (first != null ? !first.equals(pair.first) : pair.first != null) return false;
+		return second != null ? second.equals(pair.second) : pair.second == null;
+	}
 
-		} else if (c == '+') {
-			dp.zoomIn();
+	@Override
+	public int hashCode() {
+		int result = first != null ? first.hashCode() : 0;
+		result = 31 * result + (second != null ? second.hashCode() : 0);
+		return result;
+	}
 
-		} else if (c == '-') {
-			dp.zoomOut();
-		}
+	@Override
+	public String toString() {
+		return "Pair{" +
+				"first=" + first +
+				", second=" + second +
+				'}';
 	}
 }

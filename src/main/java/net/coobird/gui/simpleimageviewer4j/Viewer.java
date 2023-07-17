@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2022 Chris Kroells
+ * Copyright (c) 2014-2023 Chris Kroells
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,6 +26,8 @@ import net.coobird.gui.simpleimageviewer4j.component.ViewerPanel;
 
 import java.awt.BorderLayout;
 import java.awt.DisplayMode;
+import java.awt.Frame;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -119,6 +121,21 @@ public final class Viewer {
 		checkImagesForNull();
 	}
 
+	private Point getCenterOfScreen(Frame f) {
+		int frameWidth = f.getWidth();
+		int frameHeight = f.getHeight();
+
+		DisplayMode displayMode = f.getGraphicsConfiguration().getDevice().getDisplayMode();
+
+		int screenWidth = displayMode.getWidth();
+		int screenHeight = displayMode.getHeight();
+
+		int x = (screenWidth / 2) - (frameWidth / 2);
+		int y = (screenHeight / 2) - (frameHeight / 2);
+
+		return new Point(x, y);
+	}
+
 	/**
 	 * Displays the graphical image viewer.
 	 * <p><strong>
@@ -138,18 +155,8 @@ public final class Viewer {
 
 		f.add(new ViewerPanel(images), BorderLayout.CENTER);
 		f.pack();
-		
-		int frameWidth = f.getWidth();
-		int frameHeight = f.getHeight();
-		
-		DisplayMode displayMode = f.getGraphicsConfiguration().getDevice().getDisplayMode();
-		int screenWidth = displayMode.getWidth();
-		int screenHeight = displayMode.getHeight();
-		
-		int x = (screenWidth / 2) - (frameWidth / 2);
-		int y = (screenHeight / 2) - (frameHeight / 2);
-		f.setLocation(x, y);
-		
+
+		f.setLocation(getCenterOfScreen(f));
 		f.setVisible(true);
 	}
 

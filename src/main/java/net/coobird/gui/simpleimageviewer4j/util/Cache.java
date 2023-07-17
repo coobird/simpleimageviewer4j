@@ -20,34 +20,35 @@
  * THE SOFTWARE.
  */
 
-package net.coobird.gui.simpleimageviewer4j.component;
+package net.coobird.gui.simpleimageviewer4j.util;
 
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.lang.ref.SoftReference;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.Callable;
 
-public final class KeyNavigation extends KeyAdapter {
-	private final DisplayPanel dp;
+public class Cache<K, V> {
+	private final Object lock = new Object();
+	private final Map<K, SoftReference<V>> cache = new HashMap<K, SoftReference<V>>();
 
-	public KeyNavigation(DisplayPanel dp) {
-		this.dp = dp;
+	private V computeAndSet(K key, Callable<V> computation) throws Exception {
+		V result = computation.call();
+		cache.put(key, new SoftReference<V>(result));
+		return result;
 	}
 
-	@Override
-	public void keyReleased(KeyEvent e) {
-		int key = e.getKeyCode();
-		char c = e.getKeyChar();
+	public V computeIfAbsent(K key, Callable<V> computation) throws Exception {
+		// While this is correct, we're effectively making processing single-threaded.
+		synchronized (lock) {
+			if (!cache.containsKey(key)) {
+				return computeAndSet(key, computation);
+			}
 
-		if (key == KeyEvent.VK_LEFT) {
-			dp.showPrevious();
-
-		} else if (key == KeyEvent.VK_RIGHT) {
-			dp.showNext();
-
-		} else if (c == '+') {
-			dp.zoomIn();
-
-		} else if (c == '-') {
-			dp.zoomOut();
+			V value = cache.get(key).get();
+			if (value == null) {
+				return computeAndSet(key, computation);
+			}
+			return value;
 		}
 	}
 }

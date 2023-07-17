@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2022 Chris Kroells
+ * Copyright (c) 2014-2023 Chris Kroells
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,9 +22,12 @@
 
 package net.coobird.gui.simpleimageviewer4j.component;
 
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import java.awt.BorderLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseWheelEvent;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
@@ -45,10 +48,23 @@ public final class ViewerPanel extends JPanel {
 		final DisplayPanel dp = new DisplayPanel(images);
 		this.addKeyListener(new KeyNavigation(dp));
 
+		final JComponent scrollingViewPane = new JScrollPane(dp);
+		dp.addMouseWheelListener(new MouseAdapter() {
+			@Override
+			public void mouseWheelMoved(MouseWheelEvent e) {
+				if (e.getUnitsToScroll() > 0) {
+					dp.zoomOut();
+
+				} else if (e.getUnitsToScroll() < 0) {
+					dp.zoomIn();
+				}
+			}
+		});
+
 		final NavigationPanel np = new NavigationPanel(dp);
 		dp.addListener(np);
 
-		this.add(new JScrollPane(dp), BorderLayout.CENTER);
+		this.add(scrollingViewPane, BorderLayout.CENTER);
 		this.add(np, BorderLayout.SOUTH);
 	}
 }

@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.coobird.gui.simpleimageviewer4j</groupId>
 	<artifactId>simpleimageviewer4j</artifactId>
-	<version>0.1.1</version>
+	<version>0.1.2</version>
 	<packaging>jar</packaging>
 
 	<name>simpleimageviewer4j</name>
@@ -12,8 +12,8 @@
 
 	<licenses>
 		<license>
-			<name>The MIT License (MIT)</name>
-			<url>http://www.opensource.org/licenses/mit-license.html</url>
+			<name>MIT License</name>
+			<url>https://spdx.org/licenses/MIT.html</url>
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
@@ -22,7 +22,7 @@
 		<developer>
 			<name>Chris Kroells</name>
 			<email>coobirdnet@gmail.com</email>
-			<url>http://coobird.net</url>
+			<url>https://coobird.net</url>
 		</developer>
 	</developers>
 
@@ -243,6 +243,11 @@
 		</profile>
 	</profiles>
 	<dependencies>
+		<dependency>
+			<groupId>net.coobird</groupId>
+			<artifactId>thumbnailator</artifactId>
+			<version>0.4.20</version>
+		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
