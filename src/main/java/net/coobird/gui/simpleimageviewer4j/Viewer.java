@@ -80,12 +80,21 @@ public final class Viewer {
 			}
 		}
 	}
+
+	private static final String DEFAULT_TITLE = "Simple Image Viewer";
+	private final String title;
+
+	private String validateTitle(String title) {
+		if (title == null) {
+			throw new NullPointerException("Title must not be null.");
+		}
+		return title;
+	}
 	
 	/**
-	 * Instantiates a {@code Viewer} instance which will be prepared to
-	 * display the specified images. To display the images, call the
-	 * {@link #show()} or {@link #run()} method on the {@code Viewer}
-	 * instance.
+	 * Instantiates a {@code Viewer} instance to display the specified images.
+	 * To display the images, call the {@link #show()} or {@link #run()}
+	 * method on the {@code Viewer} instance.
 	 * <p>
 	 * If the argument is passed as an array, changes made to the original
 	 * array will not be visible to the viewer instance.
@@ -93,19 +102,35 @@ public final class Viewer {
 	 * @param images The images to display.
 	 */
 	public Viewer(BufferedImage... images) {
+		this(DEFAULT_TITLE, images);
+	}
+
+	/**
+	 * Instantiates a {@code Viewer} instance with the given title to display
+	 * the specified images. To display the images, call the {@link #show()}
+	 * or {@link #run()} method on the {@code Viewer} instance.
+	 * <p>
+	 * If the argument is passed as an array, changes made to the original
+	 * array will not be visible to the viewer instance.
+	 *
+	 * @param title The title for the image viewer window ({@link JFrame}).
+	 * @param images The images to display.
+	 */
+	public Viewer(String title, BufferedImage... images) {
+		this.title = validateTitle(title);
+
 		if (images == null || images.length == 0) {
 			throw new NullPointerException("Must specify images.");
 		}
-		
+
 		this.images = new ArrayList<BufferedImage>(Arrays.asList(images));
 		checkImagesForNull();
 	}
 	
 	/**
-	 * Instantiates a {@code Viewer} instance which will be prepared to
-	 * display the specified images. To display the images, call the
-	 * {@link #show()} or {@link #run()} method on the {@code Viewer}
-	 * instance.
+	 * Instantiates a {@code Viewer} instance to display the specified images.
+	 * To display the images, call the {@link #show()} or {@link #run()}
+	 * method on the {@code Viewer} instance.
 	 * <p>
 	 * Changes made to the original {@link Collection} will not be visible to
 	 * the viewer instance.
@@ -113,10 +138,27 @@ public final class Viewer {
 	 * @param images The images to display.
 	 */
 	public Viewer(Collection<BufferedImage> images) {
+		this(DEFAULT_TITLE, images);
+	}
+
+	/**
+	 * Instantiates a {@code Viewer} instance with the given title to display
+	 * the specified images. To display the images, call the {@link #show()}
+	 * or {@link #run()} method on the {@code Viewer} instance.
+	 * <p>
+	 * Changes made to the original {@link Collection} will not be visible to
+	 * the viewer instance.
+	 *
+	 * @param title The title for the image viewer window ({@link JFrame}).
+	 * @param images The images to display.
+	 */
+	public Viewer(String title, Collection<BufferedImage> images) {
+		this.title = validateTitle(title);
+
 		if (images == null || images.size() == 0) {
 			throw new NullPointerException("Must specify images.");
 		}
-		
+
 		this.images = new ArrayList<BufferedImage>(images);
 		checkImagesForNull();
 	}
@@ -149,7 +191,7 @@ public final class Viewer {
 	 * this method from the EDT.
 	 */
 	public void show() {
-		final JFrame f = new JFrame("Simple Image Viewer");
+		final JFrame f = new JFrame(title);
 		f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		f.setLayout(new BorderLayout());
 

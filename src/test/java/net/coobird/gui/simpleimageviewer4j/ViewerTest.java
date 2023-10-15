@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2022 Chris Kroells
+ * Copyright (c) 2014-2023 Chris Kroells
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,10 +24,12 @@ package net.coobird.gui.simpleimageviewer4j;
 
 import static org.junit.Assert.*;
 
+import java.awt.AWTException;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -261,5 +263,51 @@ public class ViewerTest {
 		
 		// when, then
 		new Viewer(images);
+	}
+
+	@Test(expected=NullPointerException.class)
+	public void constructorWithTitleIsNullForBufferedImages() {
+		// given
+		String title = null;
+		BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+
+		// when, then
+		new Viewer(title, img);
+	}
+
+	@Test(expected=NullPointerException.class)
+	public void constructorWithTitleIsNullForCollection() {
+		// given
+		String title = null;
+		BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+
+		// when, then
+		new Viewer(title, Collections.singletonList(img));
+	}
+
+	@Test
+	public void constructorWithTitleIsSetForBufferedImages() throws AWTException {
+		// given
+		String title = "My title";
+		BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+
+		// when
+		Viewer viewer = new Viewer(title, img);
+
+		// then
+		// TODO Find a way to verify title programmatically.
+	}
+
+	@Test
+	public void constructorWithTitleIsSetForCollection() {
+		// given
+		String title = "My title";
+		BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+
+		// when
+		Viewer viewer = new Viewer(title, Collections.singletonList(img));
+
+		// then
+		// TODO Find a way to verify title programmatically.
 	}
 }
