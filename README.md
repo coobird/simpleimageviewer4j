@@ -60,8 +60,3 @@ Documentation
 -------------
 
 * [Documentation](https://coobird.github.io/simpleimageviewer4j/javadoc/0.1.2/)
-
-Planned features
-----------------
-
-* Swing UI which allows zooming into and out of images.
