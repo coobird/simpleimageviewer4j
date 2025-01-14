@@ -50,6 +50,7 @@ public final class NavigationPanel extends JPanel implements DisplayChangeListen
 
 		KeyNavigation kn = new KeyNavigation(dp);
 
+		prevButton.setToolTipText("Previous image");
 		prevButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dp.showPrevious();
@@ -57,6 +58,7 @@ public final class NavigationPanel extends JPanel implements DisplayChangeListen
 		});
 		prevButton.addKeyListener(kn);
 
+		nextButton.setToolTipText("Next image");
 		nextButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dp.showNext();
@@ -64,6 +66,7 @@ public final class NavigationPanel extends JPanel implements DisplayChangeListen
 		});
 		nextButton.addKeyListener(kn);
 
+		zoomInButton.setToolTipText("Zoom in");
 		zoomInButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -72,6 +75,7 @@ public final class NavigationPanel extends JPanel implements DisplayChangeListen
 		});
 		zoomInButton.addKeyListener(kn);
 
+		zoomOutButton.setToolTipText("Zoom out");
 		zoomOutButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
