@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2022 Chris Kroells
+ * Copyright (c) 2014-2025 Chris Kroells
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
 
 /**
  * <p>
- * This package contains the main entry point for simpleimageviewer4j.
+ * This package contains {@link net.coobird.gui.simpleimageviewer4j.Viewer}, the main entry point for simpleimageviewer4j.
  * </p>
  */
 package net.coobird.gui.simpleimageviewer4j;
