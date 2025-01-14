@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2023 Chris Kroells
+ * Copyright (c) 2014-2025 Chris Kroells
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -158,5 +158,35 @@ public class ZoomTest {
 
 		// then
 		assertEquals(1.0, zoom.getMagnification(), 0.001);
+	}
+
+	@Test
+	public void setMagnificationIsValid() {
+		// given
+		Zoom zoom = new Zoom(new double[] { 0.5, 1.0, 2.0 }, 1);
+
+		// when
+		zoom.setMagnification(2.0);
+
+		// then
+		assertEquals(2.0, zoom.getMagnification(), 0.001);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void setMagnificationIsInvalidWithinRange() {
+		// given
+		Zoom zoom = new Zoom(new double[] { 0.5, 1.0, 2.0 }, 1);
+
+		// when, then
+		zoom.setMagnification(1.5);
+	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void setMagnificationIsInvalidOutsideRange() {
+		// given
+		Zoom zoom = new Zoom(new double[] { 0.5, 1.0, 2.0 }, 1);
+
+		// when, then
+		zoom.setMagnification(3.0);
 	}
 }

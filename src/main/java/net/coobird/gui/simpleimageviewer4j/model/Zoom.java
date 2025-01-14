@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2023 Chris Kroells
+ * Copyright (c) 2014-2025 Chris Kroells
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -72,6 +72,18 @@ public class Zoom {
 		if (isZoomOutPossible()) {
 			zoomIndex--;
 		}
+	}
+	
+	public void setMagnification(double zoom) {
+		for (int i = 0; i < zoomLevels.length; i++) {
+			if (zoom == zoomLevels[i]) {
+				zoomIndex = i;
+				return;
+			}
+		}
+		throw new IllegalArgumentException(
+				String.format("%s is not a valid magnification level.", zoom)
+		);
 	}
 
 	public boolean isZoomInPossible() {
