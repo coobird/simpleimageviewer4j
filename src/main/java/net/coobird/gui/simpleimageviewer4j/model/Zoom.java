@@ -22,12 +22,15 @@
 
 package net.coobird.gui.simpleimageviewer4j.model;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Zoom {
 	private int zoomIndex;
 
 	private final double[] zoomLevels;
+	private final List<ZoomChangeListener> listeners = new ArrayList<ZoomChangeListener>();
 
 	private static void checkArrayInAscendingOrder(double[] zoomLevels) {
 		double[] tmpLevels = new double[zoomLevels.length];
@@ -62,22 +65,45 @@ public class Zoom {
 		this.zoomIndex = defaultZoomIndex;
 	}
 
+	public void addListener(ZoomChangeListener listener) {
+		listeners.add(listener);
+	}
+
+	public void removeListener(ZoomChangeListener listener) {
+		listeners.remove(listener);
+	}
+
+	public void notifyListeners() {
+		for (ZoomChangeListener listener : listeners) {
+			listener.zoomChanged(zoomLevels[zoomIndex]);
+		}
+	}
+
 	public void zoomIn() {
 		if (isZoomInPossible()) {
 			zoomIndex++;
+			notifyListeners();
 		}
 	}
 
 	public void zoomOut() {
 		if (isZoomOutPossible()) {
 			zoomIndex--;
+			notifyListeners();
 		}
+	}
+
+	public double[] getZoomLevels() {
+		double[] tmp = new double[zoomLevels.length];
+		System.arraycopy(zoomLevels, 0, tmp, 0, zoomLevels.length);
+		return tmp;
 	}
 	
 	public void setMagnification(double zoom) {
 		for (int i = 0; i < zoomLevels.length; i++) {
 			if (zoom == zoomLevels[i]) {
 				zoomIndex = i;
+				notifyListeners();
 				return;
 			}
 		}

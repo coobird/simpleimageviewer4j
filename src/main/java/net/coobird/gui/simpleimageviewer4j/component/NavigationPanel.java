@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2023 Chris Kroells
+ * Copyright (c) 2014-2025 Chris Kroells
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,14 +22,25 @@
 
 package net.coobird.gui.simpleimageviewer4j.component;
 
+import net.coobird.gui.simpleimageviewer4j.model.Zoom;
+import net.coobird.gui.simpleimageviewer4j.model.ZoomChangeListener;
+
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 public final class NavigationPanel extends JPanel implements DisplayChangeListener {
 
@@ -37,8 +48,49 @@ public final class NavigationPanel extends JPanel implements DisplayChangeListen
 	private final JButton nextButton = new JButton(">");
 	private final JButton zoomInButton = new JButton("+");
 	private final JButton zoomOutButton = new JButton("-");
+	private final ZoomLevelComboBox zoomLevelList;
+
 	private final JLabel indicator;
 	private final DisplayPanel dp;
+
+	private static class ZoomLevelComboBox extends JComboBox implements ZoomChangeListener {
+		private static ComboBoxModel createModel(Zoom zoomModel) {
+			double[] zoomLevels = zoomModel.getZoomLevels();
+			Double[] tmp = new Double[zoomLevels.length];
+			for (int i = 0; i < zoomLevels.length; i++) {
+				tmp[i] = zoomLevels[i];
+			}
+			return new DefaultComboBoxModel(tmp);
+		}
+
+		private ZoomLevelComboBox(final Zoom zoomModel) {
+			super(createModel(zoomModel));
+			setSelectedItem(zoomModel.getMagnification());
+
+			this.setRenderer(new DefaultListCellRenderer() {
+				@Override
+				public Component getListCellRendererComponent(JList list, Object value, int i, boolean isSelected, boolean hasFocus) {
+					JLabel component = (JLabel) super.getListCellRendererComponent(list, value, i, isSelected, hasFocus);
+					double zoom = (Double) value;
+					component.setText(String.format("%d%%", Math.round(zoom * 100.0)));
+					return component;
+				}
+			});
+
+			this.addItemListener(new ItemListener() {
+				@Override
+				public void itemStateChanged(ItemEvent itemEvent) {
+					double selectedMagnification = (Double) itemEvent.getItem();
+					zoomModel.setMagnification(selectedMagnification);
+				}
+			});
+		}
+
+		@Override
+		public void zoomChanged(double magnification) {
+			setSelectedItem(magnification);
+		}
+	}
 
 	public NavigationPanel(final DisplayPanel dp) {
 		this.dp = dp;
@@ -47,6 +99,9 @@ public final class NavigationPanel extends JPanel implements DisplayChangeListen
 		indicator = new JLabel();
 		indicator.setFont(new Font("Monospaced", Font.PLAIN, 14));
 		indicator.setHorizontalAlignment(SwingConstants.CENTER);
+
+		zoomLevelList = new ZoomLevelComboBox(dp.getZoomModel());
+		dp.getZoomModel().addListener(zoomLevelList);
 
 		KeyNavigation kn = new KeyNavigation(dp);
 
@@ -92,8 +147,12 @@ public final class NavigationPanel extends JPanel implements DisplayChangeListen
 		rightPanel.add(zoomOutButton);
 		rightPanel.add(nextButton);
 
+		JPanel centerPanel = new JPanel(new GridLayout());
+		centerPanel.add(indicator);
+		centerPanel.add(zoomLevelList);
+
 		this.add(leftPanel);
-		this.add(indicator);
+		this.add(centerPanel);
 		this.add(rightPanel);
 
 		updateButtonStates();
@@ -124,10 +183,9 @@ public final class NavigationPanel extends JPanel implements DisplayChangeListen
 	private void updateIndicator() {
 		indicator.setText(
 				String.format(
-						"%d / %d (%d%%)",
+						"%d / %d",
 						dp.current() + 1,
-						dp.count(),
-						Math.round(dp.getMagnification() * 100.0)
+						dp.count()
 				)
 		);
 	}
