@@ -46,13 +46,21 @@ public final class NavigationPanel extends JPanel implements DisplayChangeListen
 
 	private final JButton prevButton = new JButton("<");
 	private final JButton nextButton = new JButton(">");
-	private final JButton zoomInButton = new JButton("+");
-	private final JButton zoomOutButton = new JButton("-");
+	private final ZoomButton zoomInButton;
+	private final ZoomButton zoomOutButton;
 	private final ZoomLevelComboBox zoomLevelList;
 
 	private final JLabel indicator;
 	private final DisplayPanel dp;
 
+	private abstract static class ZoomButton extends JButton implements ZoomChangeListener {
+		protected final Zoom zoomModel;
+		private ZoomButton(Zoom zoomModel, String title) {
+			super(title);
+			this.zoomModel = zoomModel;
+		}
+	}
+	
 	private static class ZoomLevelComboBox extends JComboBox implements ZoomChangeListener {
 		private static ComboBoxModel createModel(Zoom zoomModel) {
 			double[] zoomLevels = zoomModel.getZoomLevels();
@@ -100,8 +108,10 @@ public final class NavigationPanel extends JPanel implements DisplayChangeListen
 		indicator.setFont(new Font("Monospaced", Font.PLAIN, 14));
 		indicator.setHorizontalAlignment(SwingConstants.CENTER);
 
-		zoomLevelList = new ZoomLevelComboBox(dp.getZoomModel());
-		dp.getZoomModel().addListener(zoomLevelList);
+		Zoom zoomModel = dp.getZoomModel();
+
+		zoomLevelList = new ZoomLevelComboBox(zoomModel);
+		zoomModel.addListener(zoomLevelList);
 
 		KeyNavigation kn = new KeyNavigation(dp);
 
@@ -121,6 +131,12 @@ public final class NavigationPanel extends JPanel implements DisplayChangeListen
 		});
 		nextButton.addKeyListener(kn);
 
+		zoomInButton = new ZoomButton(zoomModel, "+") {
+			@Override
+			public void zoomChanged(double magnification) {
+				setEnabled(zoomModel.isZoomInPossible());
+			}
+		};
 		zoomInButton.setToolTipText("Zoom in");
 		zoomInButton.addActionListener(new ActionListener() {
 			@Override
@@ -129,7 +145,14 @@ public final class NavigationPanel extends JPanel implements DisplayChangeListen
 			}
 		});
 		zoomInButton.addKeyListener(kn);
+		zoomModel.addListener(zoomInButton);
 
+		zoomOutButton = new ZoomButton(zoomModel, "-") {
+			@Override
+			public void zoomChanged(double magnification) {
+				setEnabled(zoomModel.isZoomOutPossible());
+			}
+		};
 		zoomOutButton.setToolTipText("Zoom out");
 		zoomOutButton.addActionListener(new ActionListener() {
 			@Override
@@ -138,6 +161,7 @@ public final class NavigationPanel extends JPanel implements DisplayChangeListen
 			}
 		});
 		zoomOutButton.addKeyListener(kn);
+		zoomModel.addListener(zoomOutButton);
 
 		JPanel leftPanel = new JPanel(new GridLayout());
 		leftPanel.add(prevButton);
@@ -162,8 +186,6 @@ public final class NavigationPanel extends JPanel implements DisplayChangeListen
 	private void updateButtonStates() {
 		prevButton.setEnabled(dp.hasPrevious());
 		nextButton.setEnabled(dp.hasNext());
-		zoomInButton.setEnabled(dp.isZoomInPossible());
-		zoomOutButton.setEnabled(dp.isZoomOutPossible());
 
 		// Prevents leaving focus on button which is disabled.
 		if (!zoomInButton.isEnabled() && zoomInButton.hasFocus()) {
