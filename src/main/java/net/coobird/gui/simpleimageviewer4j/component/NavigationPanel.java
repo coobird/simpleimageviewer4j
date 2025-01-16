@@ -41,6 +41,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.ResourceBundle;
 
 public final class NavigationPanel extends JPanel implements DisplayChangeListener {
 
@@ -115,7 +116,9 @@ public final class NavigationPanel extends JPanel implements DisplayChangeListen
 
 		KeyNavigation kn = new KeyNavigation(dp);
 
-		prevButton.setToolTipText("Previous image");
+		ResourceBundle messages = ResourceBundle.getBundle("i18n.messages");
+
+		prevButton.setToolTipText(messages.getString("PreviousImage"));
 		prevButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dp.showPrevious();
@@ -123,7 +126,7 @@ public final class NavigationPanel extends JPanel implements DisplayChangeListen
 		});
 		prevButton.addKeyListener(kn);
 
-		nextButton.setToolTipText("Next image");
+		nextButton.setToolTipText(messages.getString("NextImage"));
 		nextButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dp.showNext();
@@ -137,7 +140,7 @@ public final class NavigationPanel extends JPanel implements DisplayChangeListen
 				setEnabled(zoomModel.isZoomInPossible());
 			}
 		};
-		zoomInButton.setToolTipText("Zoom in");
+		zoomInButton.setToolTipText(messages.getString("ZoomIn"));
 		zoomInButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -153,7 +156,7 @@ public final class NavigationPanel extends JPanel implements DisplayChangeListen
 				setEnabled(zoomModel.isZoomOutPossible());
 			}
 		};
-		zoomOutButton.setToolTipText("Zoom out");
+		zoomOutButton.setToolTipText(messages.getString("ZoomOut"));
 		zoomOutButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
