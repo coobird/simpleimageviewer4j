@@ -116,25 +116,10 @@ public final class DisplayPanel extends JPanel implements ZoomChangeListener {
 		}
 	}
 
-	public void zoomIn() {
-		if (zoom.isZoomInPossible()) {
-			zoom.zoomIn();
-			this.repaint();
-			notifyListeners();
-		}
-	}
-
-	public void zoomOut() {
-		if (zoom.isZoomOutPossible()) {
-			zoom.zoomOut();
-			this.repaint();
-			notifyListeners();
-		}
-	}
-
 	@Override
 	public void zoomChanged(double magnification) {
 		repaint();
+		notifyListeners();
 	}
 
 	public Zoom getZoomModel() {

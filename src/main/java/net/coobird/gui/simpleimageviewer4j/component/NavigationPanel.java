@@ -109,7 +109,7 @@ public final class NavigationPanel extends JPanel implements DisplayChangeListen
 		indicator.setFont(new Font("Monospaced", Font.PLAIN, 14));
 		indicator.setHorizontalAlignment(SwingConstants.CENTER);
 
-		Zoom zoomModel = dp.getZoomModel();
+		final Zoom zoomModel = dp.getZoomModel();
 
 		zoomLevelList = new ZoomLevelComboBox(zoomModel);
 		zoomModel.addListener(zoomLevelList);
@@ -144,7 +144,7 @@ public final class NavigationPanel extends JPanel implements DisplayChangeListen
 		zoomInButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				dp.zoomIn();
+				zoomModel.zoomIn();
 			}
 		});
 		zoomInButton.addKeyListener(kn);
@@ -160,7 +160,7 @@ public final class NavigationPanel extends JPanel implements DisplayChangeListen
 		zoomOutButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				dp.zoomOut();
+				zoomModel.zoomOut();
 			}
 		});
 		zoomOutButton.addKeyListener(kn);
