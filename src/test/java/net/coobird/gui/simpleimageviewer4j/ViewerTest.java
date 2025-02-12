@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2023 Chris Kroells
+ * Copyright (c) 2014-2025 Chris Kroells
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
 
 package net.coobird.gui.simpleimageviewer4j;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import java.awt.AWTException;
 import java.awt.image.BufferedImage;
