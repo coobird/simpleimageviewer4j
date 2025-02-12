@@ -97,7 +97,12 @@ public final class NavigationPanel extends JPanel implements DisplayChangeListen
 
 		@Override
 		public void zoomChanged(double magnification) {
+			// Find out if component had focus. If not, unfocus after selecting item.
+			boolean hasFocus = hasFocus();
 			setSelectedItem(magnification);
+			if (!hasFocus) {
+				transferFocus();
+			}
 		}
 	}
 
