@@ -22,10 +22,11 @@
 
 package net.coobird.gui.simpleimageviewer4j;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import java.awt.AWTException;
 import java.awt.image.BufferedImage;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -285,8 +286,14 @@ public class ViewerTest {
 		new Viewer(title, Collections.singletonList(img));
 	}
 
+	private String extractTitle(Viewer viewer) throws NoSuchFieldException, IllegalAccessException {
+		Field titleField = Viewer.class.getDeclaredField("title");
+		titleField.setAccessible(true);
+		return (String) titleField.get(viewer);
+	}
+
 	@Test
-	public void constructorWithTitleIsSetForBufferedImages() throws AWTException {
+	public void constructorWithTitleIsSetForBufferedImages() throws Exception {
 		// given
 		String title = "My title";
 		BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
@@ -295,11 +302,11 @@ public class ViewerTest {
 		Viewer viewer = new Viewer(title, img);
 
 		// then
-		// TODO Find a way to verify title programmatically.
+		assertEquals(title, extractTitle(viewer));
 	}
 
 	@Test
-	public void constructorWithTitleIsSetForCollection() {
+	public void constructorWithTitleIsSetForCollection() throws Exception {
 		// given
 		String title = "My title";
 		BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
@@ -308,6 +315,6 @@ public class ViewerTest {
 		Viewer viewer = new Viewer(title, Collections.singletonList(img));
 
 		// then
-		// TODO Find a way to verify title programmatically.
+		assertEquals(title, extractTitle(viewer));
 	}
 }
