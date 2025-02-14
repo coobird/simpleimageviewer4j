@@ -14,7 +14,7 @@ Feature improvements:
 Feature improvements:
 
 * Added zoom in/out capability.
-** It is possible to zoom in/out using the buttons in the navigation pane, keyboard and mouse wheel.
+  * It is possible to zoom in/out using the buttons in the navigation pane, keyboard and mouse wheel.
 
 
 ## simpleimageviewer4j 0.1.1
