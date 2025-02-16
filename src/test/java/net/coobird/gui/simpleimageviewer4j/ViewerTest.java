@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2022 Chris Kroells
+ * Copyright (c) 2014-2025 Chris Kroells
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,12 +22,15 @@
 
 package net.coobird.gui.simpleimageviewer4j;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.awt.image.BufferedImage;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -261,5 +264,57 @@ public class ViewerTest {
 		
 		// when, then
 		new Viewer(images);
+	}
+
+	@Test(expected=NullPointerException.class)
+	public void constructorWithTitleIsNullForBufferedImages() {
+		// given
+		String title = null;
+		BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+
+		// when, then
+		new Viewer(title, img);
+	}
+
+	@Test(expected=NullPointerException.class)
+	public void constructorWithTitleIsNullForCollection() {
+		// given
+		String title = null;
+		BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+
+		// when, then
+		new Viewer(title, Collections.singletonList(img));
+	}
+
+	private String extractTitle(Viewer viewer) throws NoSuchFieldException, IllegalAccessException {
+		Field titleField = Viewer.class.getDeclaredField("title");
+		titleField.setAccessible(true);
+		return (String) titleField.get(viewer);
+	}
+
+	@Test
+	public void constructorWithTitleIsSetForBufferedImages() throws Exception {
+		// given
+		String title = "My title";
+		BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+
+		// when
+		Viewer viewer = new Viewer(title, img);
+
+		// then
+		assertEquals(title, extractTitle(viewer));
+	}
+
+	@Test
+	public void constructorWithTitleIsSetForCollection() throws Exception {
+		// given
+		String title = "My title";
+		BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+
+		// when
+		Viewer viewer = new Viewer(title, Collections.singletonList(img));
+
+		// then
+		assertEquals(title, extractTitle(viewer));
 	}
 }

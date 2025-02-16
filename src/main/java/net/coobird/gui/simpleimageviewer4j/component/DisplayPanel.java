@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2023 Chris Kroells
+ * Copyright (c) 2014-2025 Chris Kroells
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,7 @@
 package net.coobird.gui.simpleimageviewer4j.component;
 
 import net.coobird.gui.simpleimageviewer4j.model.Zoom;
+import net.coobird.gui.simpleimageviewer4j.model.ZoomChangeListener;
 import net.coobird.gui.simpleimageviewer4j.util.Cache;
 import net.coobird.gui.simpleimageviewer4j.util.Pair;
 import net.coobird.thumbnailator.Thumbnails;
@@ -38,7 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-public final class DisplayPanel extends JPanel {
+public final class DisplayPanel extends JPanel implements ZoomChangeListener {
 
 	private static final double[] ZOOM_LEVELS = new double[] { 0.25, 0.5, 1.0, 2.0, 4.0 };
 	private static final int DEFAULT_ZOOM = 2;
@@ -60,6 +61,8 @@ public final class DisplayPanel extends JPanel {
 		this.images = new ArrayList<BufferedImage>(images);
 
 		curImage = this.images.get(index);
+
+		zoom.addListener(this);
 	}
 
 	/**
@@ -113,31 +116,17 @@ public final class DisplayPanel extends JPanel {
 		}
 	}
 
-	public void zoomIn() {
-		if (zoom.isZoomInPossible()) {
-			zoom.zoomIn();
-			this.repaint();
-			notifyListeners();
-		}
+	@Override
+	public void zoomChanged(double magnification) {
+		repaint();
+		notifyListeners();
 	}
 
-	public void zoomOut() {
-		if (zoom.isZoomOutPossible()) {
-			zoom.zoomOut();
-			this.repaint();
-			notifyListeners();
-		}
+	public Zoom getZoomModel() {
+		return zoom;
 	}
 
-	public boolean isZoomInPossible() {
-		return zoom.isZoomInPossible();
-	}
-
-	public boolean isZoomOutPossible() {
-		return zoom.isZoomOutPossible();
-	}
-
-	public double getMagnification() {
+	private double getMagnification() {
 		return zoom.getMagnification();
 	}
 

@@ -20,9 +20,8 @@
  * THE SOFTWARE.
  */
 
-/**
- * <p>
- * This package contains {@link net.coobird.gui.simpleimageviewer4j.Viewer}, the main entry point for simpleimageviewer4j.
- * </p>
- */
-package net.coobird.gui.simpleimageviewer4j;
+package net.coobird.gui.simpleimageviewer4j.model;
+
+public interface ZoomChangeListener {
+    void zoomChanged(double magnification);
+}

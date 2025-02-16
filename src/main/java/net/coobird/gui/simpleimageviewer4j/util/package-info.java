@@ -22,7 +22,7 @@
 
 /**
  * <p>
- * This package contains {@link net.coobird.gui.simpleimageviewer4j.Viewer}, the main entry point for simpleimageviewer4j.
+ * This package contains the utility classes for simpleimageviewer4j, not intended for reuse.
  * </p>
  */
-package net.coobird.gui.simpleimageviewer4j;
+package net.coobird.gui.simpleimageviewer4j.util;

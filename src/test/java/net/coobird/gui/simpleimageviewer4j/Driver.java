@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2023 Chris Kroells
+ * Copyright (c) 2014-2024 Chris Kroells
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,6 +30,10 @@ import java.io.InputStream;
 
 import javax.imageio.ImageIO;
 
+/**
+ * This is driver code for using simpleimageviewer4j.
+ * It will initialize a viewer loaded with some test images.
+ */
 public class Driver {
 	private static BufferedImage getImage(String res) throws IOException {
 		InputStream is = ClassLoader.getSystemResourceAsStream(res);

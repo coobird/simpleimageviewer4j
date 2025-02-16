@@ -1,5 +1,4 @@
-simpleimageviewer4j - a simple image viewer
-===========================================
+# simpleimageviewer4j - a simple image viewer
 
 *simpleimageviewer4j* provides a simple way to display images in Java (using Swing.)
 
@@ -9,8 +8,7 @@ It's a useful when:
 * A simple image viewer in necessary in an application.
 
 
-Usage
------
+## Usage
 
 A simple usage would be to specify images to display like the following:
 
@@ -34,8 +32,7 @@ new Viewer(images).show();
 ```
 
 
-Maven
------
+## Maven
 
 `simpleimageviewer4j` is available through Maven.
 
@@ -45,23 +42,16 @@ Simply add the following to the `<dependencies>` section of the POM:
 <dependency>
 	<groupId>net.coobird.gui.simpleimageviewer4j</groupId>
 	<artifactId>simpleimageviewer4j</artifactId>
-	<version>0.1.2</version>
+	<version>0.1.3</version>
 	<scope>jar</scope>
 </dependency>
 ```
 
-Features
---------
+## Features
 
 * Simple API to easily specify images to view.
 * Swing UI to cycle through and zoom in/out of images with mouse and keyboard navigation
 
-Documentation
--------------
+## Documentation
 
-* [Documentation](https://coobird.github.io/simpleimageviewer4j/javadoc/0.1.2/)
-
-Planned features
-----------------
-
-* Swing UI which allows zooming into and out of images.
+* [Documentation](https://coobird.github.io/simpleimageviewer4j/javadoc/0.1.3/)
